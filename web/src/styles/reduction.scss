@@ -1,0 +1,24 @@
+@import "variables";
+
+// libraries
+@import "~bootstrap/scss/bootstrap.scss";
+
+// base
+@import "base";
+@import "overrides";
+@import "extends";
+@import "animations";
+@import "utils/utils";
+
+// components
+@import "components/header";
+@import "components/sidebar";
+@import "components/content";
+@import "components/page";
+@import "components/widget";
+@import "components/search-input";
+@import "components/_matches-table";
+@import "components/_team-results.scss";
+
+// themes
+@import "themes/colors";

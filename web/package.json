@@ -1,0 +1,54 @@
+{
+  "name": "web-view",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "bootstrap": "^4.5.0",
+    "classnames": "^2.2.6",
+    "firebase": "^7.15.4",
+    "moment": "^2.27.0",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-component-queries": "^2.3.0",
+    "react-dom": "^16.13.1",
+    "react-ga": "^3.0.0",
+    "react-icons": "^3.10.0",
+    "react-notification-system": "^0.4.0",
+    "react-redux": "^7.2.0",
+    "react-redux-firebase": "^3.6.0",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-sizeme": "^2.6.12",
+    "reactstrap": "^8.4.1",
+    "redux": "^4.0.5",
+    "redux-firestore": "^0.13.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
