@@ -8,7 +8,7 @@ const Footer = () => {
         <NavItem>
           Source code available on{" "}
           <a
-            href="https://github.com/dcaminos"
+            href="https://github.com/dcaminos/csgo-stats"
             target="_blank"
             rel="noopener noreferrer"
           >
