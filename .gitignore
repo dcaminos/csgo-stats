@@ -62,8 +62,5 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
-
 #google service_account public key
 script/csgo-stats-457a9-4aacb43cb750.json
