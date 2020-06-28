@@ -1,44 +1,48 @@
 import React from "react";
-import { Card, CardBody, Table } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import 'react-bootstrap-table/dist/react-bootstrap-table.min.css';
 
 const RankTable = ({ data }) => {
+  console.log(data);
   return (
     <Card>
       <CardBody>
-        <Table responsive>
-          <thead>
-            <tr className=" align-middle">
-              <th>{"Player"}</th>
-              <th className="text-center">{"Rank"}</th>
-              <th className="text-center">{"Rounds"}</th>
-              <th className="text-center">{"Matches"}</th>
-              <th className="text-center">{"kills"}</th>
-              <th className="text-center">{"Deaths"}</th>
-              <th className="text-center">{"Assists"}</th>
-              <th className="text-center">{"Headshots"}</th>
-              <th className="text-center">{"mvps"}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((player, index) => (
-              <tr key={index}>
-                <td className="align-middle text-left">{player.name}</td>
-                <td className="align-middle text-center font-weight-bold">
-                  {player.rankText}
-                </td>
-                <td className="align-middle text-center">{player.rounds}</td>
-                <td className="align-middle text-center">{player.matches}</td>
-                <td className="align-middle text-center">{player.kills}</td>
-                <td className="align-middle text-center">{player.deaths}</td>
-                <td className="align-middle text-center">{player.assists}</td>
-                <td className="align-middle text-center">
-                  {player.headshotKills}
-                </td>
-                <td className="align-middle text-center">{player.mvps}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <BootstrapTable data={data} hover={true}>
+          <TableHeaderColumn
+            dataField="name"
+            isKey={true}
+            dataSort={true}
+            tdStyle={{ textOverflow: 'inherit', width: '15%' }}
+            thStyle={{ textOverflow: 'inherit', width: '15%' }}
+          >
+            Player
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="rank" dataSort={true}>
+            Rank
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="rounds" dataSort={true}>
+            Rounds
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="matches" dataSort={true}>
+            Matches
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="kills" dataSort={true}>
+            Kills
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="deaths" dataSort={true}>
+            Deaths
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="assists" dataSort={true}>
+            Assists
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="headshotKills" dataSort={true}>
+            Headshots
+          </TableHeaderColumn>
+          <TableHeaderColumn dataField="mvps" dataSort={true}>
+            mvps
+          </TableHeaderColumn>
+        </BootstrapTable>
       </CardBody>
     </Card>
   );
