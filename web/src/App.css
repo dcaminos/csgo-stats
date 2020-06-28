@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+.fa-sort-asc {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(-135deg);
+  -webkit-transform: rotate(-135deg);
+  margin: -1px 10px !important;
+}
+
+.fa-sort-desc {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  margin: 3px 10px !important;
+}
+
+.react-bs-table-bordered {
+  border: none !important;
+}
+
+.table-top-border {
+  border-top: 2px solid #dee2e6;
+}
