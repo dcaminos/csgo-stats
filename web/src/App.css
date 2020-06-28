@@ -64,3 +64,21 @@
 .table-top-border {
   border-top: 2px solid #dee2e6;
 }
+
+.react-bs-table table td,
+.react-bs-table table th {
+  overflow: auto;
+  white-space: nowrap;
+  text-overflow: unset !important;
+}
+
+.react-bs-table {
+  min-width: fit-content;
+}
+
+.react-bs-table-container {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

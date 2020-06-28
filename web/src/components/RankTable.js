@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardBody } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import "react-bootstrap-table/dist/react-bootstrap-table-all.min.css";
 import "App.css";
 
 const RankTable = ({ data }) => {
@@ -13,6 +12,7 @@ const RankTable = ({ data }) => {
           version="4"
           data={data}
           hover={true}
+          bordered={false}
           className="table-borderless"
           trClassName="table-top-border"
         >
@@ -20,10 +20,10 @@ const RankTable = ({ data }) => {
             dataField="name"
             isKey={true}
             dataSort={true}
-            tdStyle={{ textOverflow: "inherit", width: "15%" }}
+            tdStyle={{ textOverflow: "inherit", minWidth: "150px" }}
             thStyle={{
               textOverflow: "inherit",
-              width: "15%",
+              minWidth: "150px",
               borderBottom: "1px solid #dee2e6",
             }}
           >
@@ -32,10 +32,10 @@ const RankTable = ({ data }) => {
           <TableHeaderColumn
             dataField="rank"
             dataSort={true}
-            tdStyle={{ textOverflow: "inherit", width: "8%" }}
+            tdStyle={{ textOverflow: "inherit", minWidth: "95px" }}
             thStyle={{
               textOverflow: "inherit",
-              width: "8%",
+              minWidth: "95px",
               borderBottom: "1px solid #dee2e6",
             }}
           >
@@ -44,10 +44,10 @@ const RankTable = ({ data }) => {
           <TableHeaderColumn
             dataField="rounds"
             dataSort={true}
-            tdStyle={{ textOverflow: "inherit", width: "9.5%" }}
+            tdStyle={{ textOverflow: "inherit", minWidth: "115px" }}
             thStyle={{
               textOverflow: "inherit",
-              width: "9.5%",
+              minWidth: "115px",
               borderBottom: "1px solid #dee2e6",
             }}
           >
@@ -56,10 +56,10 @@ const RankTable = ({ data }) => {
           <TableHeaderColumn
             dataField="matches"
             dataSort={true}
-            tdStyle={{ textOverflow: "inherit", width: "11.5%" }}
+            tdStyle={{ textOverflow: "inherit", minWidth: "125px" }}
             thStyle={{
               textOverflow: "inherit",
-              width: "11.5%",
+              minWidth: "125px",
               borderBottom: "1px solid #dee2e6",
             }}
           >
@@ -68,41 +68,45 @@ const RankTable = ({ data }) => {
           <TableHeaderColumn
             dataField="kills"
             dataSort={true}
-            thStyle={{ borderBottom: "1px solid #dee2e6" }}
-          >
+            thStyle={{ borderBottom: "1px solid #dee2e6", minWidth: "110px" }}
+            tdStyle={{ minWidth: "110px" }}
+            >
             Kills
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="deaths"
             dataSort={true}
-            thStyle={{ borderBottom: "1px solid #dee2e6" }}
-          >
+            thStyle={{ borderBottom: "1px solid #dee2e6", minWidth: "130px" }}
+            tdStyle={{ minWidth: "130px" }}
+            >
             Deaths
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="assists"
             dataSort={true}
-            thStyle={{ borderBottom: "1px solid #dee2e6" }}
-          >
+            thStyle={{ borderBottom: "1px solid #dee2e6", minWidth: "115px" }}
+            tdStyle={{ minWidth: "115px" }}
+            >
             Assists
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="headshotKills"
             dataSort={true}
-            tdStyle={{ textOverflow: "inherit", width: "12%" }}
+            tdStyle={{ textOverflow: "inherit", minWidth: "142px" }}
             thStyle={{
               textOverflow: "inherit",
-              width: "12%",
+              minWidth: "142px",
               borderBottom: "1px solid #dee2e6",
             }}
-          >
+            >
             Headshots
           </TableHeaderColumn>
           <TableHeaderColumn
             dataField="mvps"
             dataSort={true}
-            thStyle={{ borderBottom: "1px solid #dee2e6" }}
-          >
+            thStyle={{ borderBottom: "1px solid #dee2e6", minWidth: "100px" }}
+            tdStyle={{ minWidth: "100px" }}
+            >
             mvps
           </TableHeaderColumn>
         </BootstrapTable>
