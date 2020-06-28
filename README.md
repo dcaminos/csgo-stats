@@ -28,7 +28,7 @@ React application to render ranking, matches and a balancer to create teams base
 ```bash
 cd web
 yarn install
-yan start
+yarn start
 ```
 
 **To deploy**
