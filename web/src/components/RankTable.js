@@ -1,7 +1,7 @@
-import React from "react";
-import { Card, CardBody } from "reactstrap";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "App.css";
+import React from "react";
+import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
+import { Card, CardBody } from "reactstrap";
 
 const RankTable = ({ data }) => {
   const initialSort = {
@@ -40,6 +40,8 @@ const RankTable = ({ data }) => {
               textOverflow: "inherit",
               minWidth: "95px",
             }}
+            className="text-center"
+            columnClassName="text-center font-weight-bold"
           >
             Rank
           </TableHeaderColumn>
@@ -51,6 +53,8 @@ const RankTable = ({ data }) => {
               textOverflow: "inherit",
               minWidth: "115px",
             }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Rounds
           </TableHeaderColumn>
@@ -62,6 +66,8 @@ const RankTable = ({ data }) => {
               textOverflow: "inherit",
               minWidth: "125px",
             }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Matches
           </TableHeaderColumn>
@@ -70,6 +76,8 @@ const RankTable = ({ data }) => {
             dataSort={true}
             thStyle={{ minWidth: "110px" }}
             tdStyle={{ minWidth: "110px" }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Kills
           </TableHeaderColumn>
@@ -78,6 +86,8 @@ const RankTable = ({ data }) => {
             dataSort={true}
             thStyle={{ minWidth: "130px" }}
             tdStyle={{ minWidth: "130px" }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Deaths
           </TableHeaderColumn>
@@ -86,6 +96,8 @@ const RankTable = ({ data }) => {
             dataSort={true}
             thStyle={{ minWidth: "115px" }}
             tdStyle={{ minWidth: "115px" }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Assists
           </TableHeaderColumn>
@@ -97,6 +109,8 @@ const RankTable = ({ data }) => {
               textOverflow: "inherit",
               minWidth: "142px",
             }}
+            className="text-center"
+            columnClassName="text-center"
           >
             Headshots
           </TableHeaderColumn>
@@ -105,6 +119,8 @@ const RankTable = ({ data }) => {
             dataSort={true}
             thStyle={{ minWidth: "100px" }}
             tdStyle={{ minWidth: "100px" }}
+            className="text-center"
+            columnClassName="text-center"
           >
             mvps
           </TableHeaderColumn>
