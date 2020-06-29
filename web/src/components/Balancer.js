@@ -6,7 +6,7 @@ import { Col, Row } from "reactstrap";
 const Balancer = ({ players }) => {
   const initActives = {};
   players.forEach((player) => {
-    initActives[player.id] = true;
+    initActives[player.id] = false;
   });
 
   const [actives, setActives] = useState(initActives);
