@@ -3,11 +3,11 @@ import { Card, CardBody } from "reactstrap";
 import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
 import "App.css";
 
-var initialSort = {
-  defaultSortName: "rank",
-  defaultSortOrder: "desc",
-};
 const RankTable = ({ data }) => {
+  const initialSort = {
+    defaultSortName: "rank",
+    defaultSortOrder: "desc",
+  };
   return (
     <Card>
       <CardBody>
