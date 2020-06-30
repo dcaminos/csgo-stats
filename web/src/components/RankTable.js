@@ -1,132 +1,68 @@
 import "App.css";
 import React from "react";
-import { BootstrapTable, TableHeaderColumn } from "react-bootstrap-table";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Table } from "reactstrap";
+import SortData from "./SortData";
 
 const RankTable = ({ data }) => {
-  const initialSort = {
-    defaultSortName: "rank",
-    defaultSortOrder: "desc",
-  };
+  data.map((player, index) => {
+    player.position = index + 1;
+    return player;
+  });
+  const { items, requestSort, getClassNamesFor } = SortData(data, { key:'rank', direction:'descending' });
   return (
-    <Card>
-      <CardBody>
-        <BootstrapTable
-          options={initialSort}
-          version="4"
-          data={data}
-          hover={true}
-          bordered={false}
-          className="table-borderless"
-          trClassName="table-top-border"
-        >
-          <TableHeaderColumn
-            dataField="name"
-            isKey={true}
-            dataSort={true}
-            tdStyle={{ textOverflow: "inherit", minWidth: "150px" }}
-            thStyle={{
-              textOverflow: "inherit",
-              minWidth: "150px",
-            }}
-          >
-            Player
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="rank"
-            dataSort={true}
-            tdStyle={{ textOverflow: "inherit", minWidth: "95px" }}
-            thStyle={{
-              textOverflow: "inherit",
-              minWidth: "95px",
-            }}
-            className="text-center"
-            columnClassName="text-center font-weight-bold"
-          >
-            Rank
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="rounds"
-            dataSort={true}
-            tdStyle={{ textOverflow: "inherit", minWidth: "115px" }}
-            thStyle={{
-              textOverflow: "inherit",
-              minWidth: "115px",
-            }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Rounds
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="matches"
-            dataSort={true}
-            tdStyle={{ textOverflow: "inherit", minWidth: "125px" }}
-            thStyle={{
-              textOverflow: "inherit",
-              minWidth: "125px",
-            }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Matches
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="kills"
-            dataSort={true}
-            thStyle={{ minWidth: "110px" }}
-            tdStyle={{ minWidth: "110px" }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Kills
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="deaths"
-            dataSort={true}
-            thStyle={{ minWidth: "130px" }}
-            tdStyle={{ minWidth: "130px" }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Deaths
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="assists"
-            dataSort={true}
-            thStyle={{ minWidth: "115px" }}
-            tdStyle={{ minWidth: "115px" }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Assists
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="headshotKills"
-            dataSort={true}
-            tdStyle={{ textOverflow: "inherit", minWidth: "142px" }}
-            thStyle={{
-              textOverflow: "inherit",
-              minWidth: "142px",
-            }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            Headshots
-          </TableHeaderColumn>
-          <TableHeaderColumn
-            dataField="mvps"
-            dataSort={true}
-            thStyle={{ minWidth: "100px" }}
-            tdStyle={{ minWidth: "100px" }}
-            className="text-center"
-            columnClassName="text-center"
-          >
-            mvps
-          </TableHeaderColumn>
-        </BootstrapTable>
-      </CardBody>
-    </Card>
+      <Card>
+        <CardBody>
+          <Table responsive>
+            <thead>
+              <tr className=" align-middle">
+                <th className="text-center"><span className={getClassNamesFor("position")}
+                  onClick={() => requestSort("position")}>{"#"}</span></th>
+                <th><span className={getClassNamesFor("name")}
+                  onClick={() => requestSort("name")}>{"Player"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("rank")}
+                  onClick={() => requestSort("rank")}>{"Rank"}</span></th>
+                <th className={"text-center"}>
+                  <span className={getClassNamesFor("rounds")}
+                  onClick={() => requestSort("rounds")}>
+                  {"Rounds"}
+                  </span></th>
+                <th className="text-center"><span className={getClassNamesFor("matches")}
+                  onClick={() => requestSort("matches")}>{"Matches"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("kills")}
+                  onClick={() => requestSort("kills")}>{"Kills"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("deaths")}
+                  onClick={() => requestSort("deaths")}>{"Deaths"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("assists")}
+                  onClick={() => requestSort("assists")}>{"Assists"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("headshotskills")}
+                  onClick={() => requestSort("headshotskills")}>{"Headshots"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("mvps")}
+                  onClick={() => requestSort("mvps")}>{"mvps"}</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((player, index) => (
+                <tr key={index}>
+                  <td className="align-middle text-center">{player.position}</td>
+                  <td className="align-middle text-left">{player.name}</td>
+                  <td className="align-middle text-center font-weight-bold">
+                    {player.rankText}
+                  </td>
+                  <td className="align-middle text-center">{player.rounds}</td>
+                  <td className="align-middle text-center">{player.matches}</td>
+                  <td className="align-middle text-center">{player.kills}</td>
+                  <td className="align-middle text-center">{player.deaths}</td>
+                  <td className="align-middle text-center">{player.assists}</td>
+                  <td className="align-middle text-center">
+                    {player.headshotKills}
+                  </td>
+                  <td className="align-middle text-center">{player.mvps}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </CardBody>
+      </Card>
   );
 };
 
