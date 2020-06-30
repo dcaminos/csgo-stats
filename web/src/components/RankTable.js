@@ -1,17 +1,48 @@
 import "App.css";
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, Table } from "reactstrap";
 import SortData from "./SortData";
 
 const RankTable = ({ data }) => {
+  const [rankData, setRankData] = useState(data);
+
   data.map((player, index) => {
     player.position = index + 1;
     return player;
   });
-  const { items, requestSort, getClassNamesFor } = SortData(data, { key:'rank', direction:'descending' });
+
+  const { items, requestSort, getClassNamesFor } = SortData(rankData, { key:'rank', direction:'descending' });
+
+  const search = (event) => {
+    event.preventDefault();
+    if (event.target.value) {
+      let filtered = items.filter(item => {
+        return (
+          item.position === Number(event.target.value) ||
+          item.name.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.rank.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.rounds === Number(event.target.value) ||
+          item.matches === Number(event.target.value) ||
+          item.kills.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.deaths.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.assists.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.headshotKills.toLowerCase().includes(event.target.value.toLowerCase()) ||
+          item.mvps.toLowerCase().includes(event.target.value.toLowerCase())
+        );
+      });
+      setRankData(filtered);
+    } else {
+      setRankData(data) ;
+    }
+  };
   return (
       <Card>
         <CardBody>
+        <input
+          type="text"
+          onChange={search}
+          className="form-control"
+        />
           <Table responsive>
             <thead>
               <tr className=" align-middle">
@@ -34,8 +65,8 @@ const RankTable = ({ data }) => {
                   onClick={() => requestSort("deaths")}>{"Deaths"}</span></th>
                 <th className="text-center"><span className={getClassNamesFor("assists")}
                   onClick={() => requestSort("assists")}>{"Assists"}</span></th>
-                <th className="text-center"><span className={getClassNamesFor("headshotskills")}
-                  onClick={() => requestSort("headshotskills")}>{"Headshots"}</span></th>
+                <th className="text-center"><span className={getClassNamesFor("headshotKills")}
+                  onClick={() => requestSort("headshotKills")}>{"Headshots"}</span></th>
                 <th className="text-center"><span className={getClassNamesFor("mvps")}
                   onClick={() => requestSort("mvps")}>{"mvps"}</span></th>
               </tr>
