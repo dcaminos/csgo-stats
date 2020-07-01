@@ -10,6 +10,7 @@ import BalancerPage from "./pages/Balancer";
 import MatchPage from "./pages/Match";
 import MatchesPage from "./pages/Matches";
 import RankingPage from "./pages/Ranking";
+import ProgressPage from "./pages/Progress";
 import "./styles/reduction.scss";
 
 const App = ({ breakpoint }) => {
@@ -31,7 +32,7 @@ const App = ({ breakpoint }) => {
               render={(props) => <MatchPage id={props.match.params.id} />}
             />
             <Route exact path="/balancer" component={BalancerPage} />
-            <Route exact path="/stats" component={null} />
+            <Route exact path="/stats" component={ProgressPage} />
           </React.Suspense>
         </MainLayout>
         <Redirect to="/" />
