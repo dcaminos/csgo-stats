@@ -64,7 +64,10 @@ const parseMatchInfo = (matchInfo) => ({
 export const getRanking = (state) => {
   return {
     ...state.ranking,
-    data: state.ranking.data.map(parseRanking).sort((a, b) => b.rank - a.rank),
+    data: state.ranking.data
+      .map(parseRanking)
+      .sort((a, b) => b.rank - a.rank)
+      .map((player, index) => ({ ...player, position: index + 1 })),
   };
 };
 
@@ -72,7 +75,6 @@ export const parseRanking = (player, index) => {
   const rank = (player.score / player.rounds).toFixed(3);
   return {
     ...player,
-    position: index + 1,
     kills: `${(player.kills / player.rounds).toFixed(3)} (${player.kills})`,
     deaths: `${(player.deaths / player.rounds).toFixed(3)} (${player.deaths})`,
     assists: `${(player.assists / player.rounds).toFixed(3)} (${
