@@ -68,10 +68,11 @@ export const getRanking = (state) => {
   };
 };
 
-export const parseRanking = (player) => {
+export const parseRanking = (player, index) => {
   const rank = (player.score / player.rounds).toFixed(3);
   return {
     ...player,
+    position: index + 1,
     kills: `${(player.kills / player.rounds).toFixed(3)} (${player.kills})`,
     deaths: `${(player.deaths / player.rounds).toFixed(3)} (${player.deaths})`,
     assists: `${(player.assists / player.rounds).toFixed(3)} (${
