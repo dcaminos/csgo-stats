@@ -1,10 +1,12 @@
-import { useState, useMemo } from "react";
-
-const SortData = (items, config = null) => {
-  const [sortConfig, setSortConfig] = useState(config);
+import React, { useMemo, useState } from "react";
+const withSorting = (WrappedComponent) => ({ data }) => {
+  const [sortConfig, setSortConfig] = useState({
+    key: "rank",
+    direction: "descending",
+  });
 
   const sortedItems = useMemo(() => {
-    let sortableItems = [...items];
+    let sortableItems = [...data];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -17,13 +19,13 @@ const SortData = (items, config = null) => {
       });
     }
     return sortableItems;
-  }, [items, sortConfig]);
+  }, [data, sortConfig]);
 
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
       return;
     }
-    return sortConfig.key === name ? sortConfig.direction : '';
+    return sortConfig.key === name ? sortConfig.direction : "";
   };
 
   const requestSort = (key) => {
@@ -35,10 +37,21 @@ const SortData = (items, config = null) => {
     ) {
       direction = "descending";
     }
+    console.log({ key, direction });
     setSortConfig({ key, direction });
   };
 
-  return { items: sortedItems, requestSort, getClassNamesFor };
+  const ColumnTitle = ({ className = "text-center", id, text }) => {
+    return (
+      <th className={className}>
+        <span className={getClassNamesFor(id)} onClick={() => requestSort(id)}>
+          {text}
+        </span>
+      </th>
+    );
+  };
+
+  return <WrappedComponent data={sortedItems} ColumnTitle={ColumnTitle} />;
 };
 
-export default SortData;
+export default withSorting;
