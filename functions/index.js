@@ -5,6 +5,50 @@ const cors = require("cors");
 admin.initializeApp(functions.config().firebase);
 let db = admin.firestore();
 
+exports.progress = functions.https.onRequest((request, response) => {
+  return cors()(request, response, () => {
+    const result = {};
+
+    const parsePlayer = (p, timestamp) => {
+      if (!result[p.id]) {
+        result[p.id] = {
+          id: p.id,
+          name: p.name,
+          data: [Object.assign(p, { timestamp: timestamp })],
+          // data: [{ timestamp: timestamp, ...p }],
+        };
+      } else {
+        result[p.id].data.push(Object.assign(p, { timestamp: timestamp }));
+      }
+    };
+
+    const findPlayers = (match) => {
+      match.team1.forEach((p) => {
+        parsePlayer(p, match.timestamp);
+      });
+      match.team2.forEach((p) => {
+        parsePlayer(p, match.timestamp);
+      });
+    };
+
+    db.collection("match_info")
+      .get()
+      .then((snapshot) => {
+        snapshot.forEach((doc) => {
+          findPlayers(doc.data());
+        });
+
+        const list = Object.keys(result).map((k) => result[k]);
+
+        response.send(list);
+        return;
+      })
+      .catch((err) => {
+        console.log("Error getting documents", err);
+      });
+  });
+});
+
 exports.ranking = functions.https.onRequest((request, response) => {
   return cors()(request, response, () => {
     let players = [];
