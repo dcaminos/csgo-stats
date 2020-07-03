@@ -72,19 +72,15 @@ export const getRanking = (state) => {
 };
 
 export const parseRanking = (player, index) => {
-  const rank = (player.score / player.rounds).toFixed(3);
+  const rank = (player.score / player.rounds).toFixed(3).replace('.', ',');
   return {
     ...player,
-    kills: `${(player.kills / player.rounds).toFixed(3)} (${player.kills})`,
-    deaths: `${(player.deaths / player.rounds).toFixed(3)} (${player.deaths})`,
-    assists: `${(player.assists / player.rounds).toFixed(3)} (${
-      player.assists
-    })`,
-    headshotKills: `${(player.headshotKills / player.rounds).toFixed(3)} (${
-      player.headshotKills
-    })`,
-    mvps: `${(player.mvps / player.rounds).toFixed(3)} (${player.mvps})`,
+    kills: `${(player.kills / player.rounds).toFixed(3).replace('.', ',')}`,
+    deaths: `${(player.deaths / player.rounds).toFixed(3).replace('.', ',')}`,
+    assists: `${(player.assists / player.rounds).toFixed(3).replace('.', ',')}`,
+    headshotKills: `${(player.headshotKills / player.rounds).toFixed(3).replace('.', ',')}`,
+    mvps: `${(player.mvps / player.rounds).toFixed(3).replace('.', ',')}`,
     rank: rank,
-    rankText: `${rank} (${player.score})`,
+    rankText: `${rank}`,
   };
 };
