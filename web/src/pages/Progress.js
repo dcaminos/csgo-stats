@@ -51,6 +51,7 @@ const ProgressPage = () => {
             options={{
               responsive: true,
               maintainAspectRatio: false,
+              spanGaps: false,
             }}
           />
         </Col>

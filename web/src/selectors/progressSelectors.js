@@ -61,7 +61,7 @@ const getChartData = ({ data, indicators }) => {
     data: timestamps.map(
       (t) =>
         (player.data.find((x) => x.timestamp._seconds === t) || {
-          [selectedId]: 0,
+          [selectedId]: null,
         })[selectedId]
     ),
   }));
