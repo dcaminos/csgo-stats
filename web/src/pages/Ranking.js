@@ -4,7 +4,7 @@ import RankTable from "components/RankTable";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Col, Row } from "reactstrap";
-import { getRanking } from "selectors/index";
+import { getRanking } from "selectors/rankingSelectors";
 
 const MatchPage = () => {
   const ranking = useSelector(getRanking);

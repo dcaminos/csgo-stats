@@ -9,6 +9,7 @@ import {
   ReactReduxFirebaseProvider,
 } from "react-redux-firebase";
 import rankingReducer from "reducers/ranking";
+import progressReducer from "reducers/progress";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { createFirestoreInstance, firestoreReducer } from "redux-firestore"; // <- needed if using firestore
 import thunkMiddleware from "redux-thunk";
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer, // <- needed if using firestore
   ranking: rankingReducer,
+  progress: progressReducer,
 });
 
 // Create store with reducers

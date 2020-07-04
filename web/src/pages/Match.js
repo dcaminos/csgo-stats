@@ -5,7 +5,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
 import { Col, Row } from "reactstrap";
-import { getMatchInfo } from "selectors";
+import { getMatchInfo } from "selectors/rankingSelectors";
 
 const MatchPage = ({ id }) => {
   useFirestoreConnect(() => [{ collection: "match_info", doc: id }]);
