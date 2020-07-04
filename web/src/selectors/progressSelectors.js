@@ -11,8 +11,9 @@ const getRandomRgb = () => {
   return { r, g, b };
 };
 
-const generateLineStyle = () => {
+const generateLineStyle = (playerId) => {
   const color = randomColor({
+    seed: playerId,
     format: "rgba",
   });
 
@@ -48,17 +49,20 @@ const getTimestamps = (data) =>
     )
   );
 
-const getChartData = (data) => {
+const getChartData = ({ data, indicators }) => {
   const timestamps = getTimestamps(data);
 
+  const { selectedId } = indicators;
+
   const datasets = data.map((player) => ({
-    ...generateLineStyle(),
+    ...generateLineStyle(player.id),
     label: player.name,
     hidden: true,
     data: timestamps.map(
       (t) =>
-        (player.data.find((x) => x.timestamp._seconds === t) || { score: 0 })
-          .score
+        (player.data.find((x) => x.timestamp._seconds === t) || {
+          [selectedId]: 0,
+        })[selectedId]
     ),
   }));
 
@@ -73,11 +77,20 @@ const getChartData = (data) => {
 };
 
 export const getChartDataSelector = createSelector(
-  (state) => state.progress.data,
+  (state) => state.progress,
   getChartData
 );
 
 export const isLoadingSelector = createSelector(
   (state) => state.progress.isLoading,
   (isLoading) => isLoading
+);
+
+export const selectedIndicatorSelector = createSelector(
+  (state) => state.progress.indicators,
+  (indicatods) => indicatods.selectedId
+);
+export const indicatorOptionsSelector = createSelector(
+  (state) => state.progress.indicators.options,
+  (options) => options
 );
