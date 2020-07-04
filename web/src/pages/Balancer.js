@@ -3,7 +3,7 @@ import Page from "components/Page";
 import PageSpinner from "components/PageSpinner";
 import React from "react";
 import { useSelector } from "react-redux";
-import { getRanking } from "selectors/index";
+import { getRanking } from "selectors/rankingSelectors";
 
 const BalancerPage = () => {
   const ranking = useSelector(getRanking);
