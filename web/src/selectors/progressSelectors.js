@@ -1,4 +1,3 @@
-import moment from "moment";
 import randomColor from "randomcolor";
 import { createSelector } from "reselect";
 
@@ -14,6 +13,7 @@ const getRandomRgb = () => {
 const generateLineStyle = (playerId) => {
   const color = randomColor({
     seed: playerId,
+    luminosity: "dark",
     format: "rgba",
   });
 

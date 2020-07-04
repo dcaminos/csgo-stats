@@ -1,17 +1,16 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { changeIndicatorAction, fetchProgressAction } from "actions/progress";
 import Page from "components/Page";
 import PageSpinner from "components/PageSpinner";
-import RankTable from "components/RankTable";
+import React, { useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import { useDispatch, useSelector } from "react-redux";
 import { Col, Row } from "reactstrap";
 import {
   getChartDataSelector,
+  indicatorOptionsSelector,
   isLoadingSelector,
   selectedIndicatorSelector,
-  indicatorOptionsSelector,
 } from "selectors/progressSelectors";
-import { fetchProgressAction, changeIndicatorAction } from "actions/progress";
 
 const ProgressPage = () => {
   const dispatch = useDispatch();
@@ -33,27 +32,10 @@ const ProgressPage = () => {
   }
 
   return (
-    <Page>
+    <Page title={"Stats"}>
       <Row>
-        <Col
-          xs="12"
-          sm="3"
-          style={{
-            marginTop: "auto",
-            marginBottom: "auto",
-          }}
-        >
-          <h3>Select Indicator</h3>
-        </Col>
-        <Col
-          xs="12"
-          sm="9"
-          style={{
-            marginTop: "auto",
-            marginBottom: "auto",
-          }}
-        >
-          <select value={indicatorId} onChange={handleChange}>
+        <Col className="text-right">
+          <select value={indicatorId} onChange={handleChange} class="ml-4">
             {indicatorsOptions.map((option) => (
               <option value={option}>{option}</option>
             ))}
@@ -63,9 +45,14 @@ const ProgressPage = () => {
 
       <Row>
         <Col xs="12">
-          <div style={{ width: "100%" }}>
-            <Line data={chartData} />
-          </div>
+          <Line
+            data={chartData}
+            height="700"
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+          />
         </Col>
       </Row>
     </Page>
