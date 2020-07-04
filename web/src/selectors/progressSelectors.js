@@ -1,5 +1,6 @@
 import moment from "moment";
 import randomColor from "randomcolor";
+import { createSelector } from "reselect";
 
 const getRandomRgb = () => {
   var num = Math.round(0xffffff * Math.random());
@@ -47,9 +48,7 @@ const getTimestamps = (data) =>
     )
   );
 
-export const getChartDataSelector = ({ progress = { data: [] } }) => {
-  const { data } = progress;
-
+const getChartData = (data) => {
   const timestamps = getTimestamps(data);
 
   const datasets = data.map((player) => ({
@@ -63,10 +62,6 @@ export const getChartDataSelector = ({ progress = { data: [] } }) => {
     ),
   }));
 
-  console.log(
-    timestamps.map((t) => new Date(t * 1000).toLocaleDateString("es-AR"))
-  );
-
   const result = {
     labels: timestamps.map((t) =>
       new Date(t * 1000).toLocaleDateString("es-AR")
@@ -77,7 +72,12 @@ export const getChartDataSelector = ({ progress = { data: [] } }) => {
   return result;
 };
 
-export const isLoadingSelector = ({ progress }) => {
-  const { isLoading } = progress;
-  return isLoading;
-};
+export const getChartDataSelector = createSelector(
+  (state) => state.progress.data,
+  getChartData
+);
+
+export const isLoadingSelector = createSelector(
+  (state) => state.progress.isLoading,
+  (isLoading) => isLoading
+);

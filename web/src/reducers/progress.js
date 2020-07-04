@@ -19,7 +19,6 @@ const newsReducer = (state = initialState, action) => {
         error: null,
       };
     case FETCH_PROGRESS_SUCCESS:
-      console.log("FETCH_PROGRESS_SUCCESS", action);
       return {
         data: action.payload,
         isLoading: false,
