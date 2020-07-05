@@ -1,3 +1,4 @@
+import ServerActions from "components/ServerActions";
 import React from "react";
 import { MdClearAll } from "react-icons/md";
 import { Button, Nav, Navbar } from "reactstrap";
@@ -15,12 +16,17 @@ class Header extends React.Component {
 
   render() {
     return (
-      <Navbar light expand className={bem.b("bg-white")}>
+      <Navbar
+        light
+        expand
+        className={bem.b("bg-white d-flex justify-content-between")}
+      >
         <Nav navbar className="mr-2">
           <Button outline onClick={this.handleSidebarControlButton}>
             <MdClearAll size={25} />
           </Button>
         </Nav>
+        <ServerActions />
       </Navbar>
     );
   }
