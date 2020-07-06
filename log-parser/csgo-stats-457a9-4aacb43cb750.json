@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "csgo-stats-457a9",
+  "private_key_id": "4aacb43cb7504751a2cb73ab70b87e0f9dccc0f8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDQsrJYhLWTrI8m\nMQxAeaGdPxpm+prPwtL7wwmlOQfFa0bO3n5f/gS3Gmv4V2Dfh8XLiWyfKV/fX5kK\nleFynjxe6faLsLdZkzVgRuVB5aLaPncfHflUzCll10eF1vxYCYkXwGEI+FU5qh7Y\n26Y8RHnv5z8rfk5+B6i8eXOLqYNWDMylogwtx52rGAbImG4ebcrTbEKQVR++uw9D\n0eBVVNsaFazCH0TmTebphtvU2IFmgNCBHiCZCU6OvbKbvjFtCfXHZRHn/QgGBfhK\ngGObUgUTRd12JEtleOpH6SpSIGOd/VGST+ebEzVod++gm8ExYf80MYQ4/uunS2lI\nHw9epTaDAgMBAAECggEAHACWKIVp/a4OKRA0tiP72OcCKmYexpi8CXbigO5Viho6\nToCREV06kbz0VsaWo3eKxSQj1HlPOWAQ31g7/06XCB85awXjnBvB8jChC0X+I211\nO1Igxc19EoKfwKgXhNKGuA6ilnsHqGyYpf1W4UhI2jU7hyDz9Dof3GYpaEhu7Gke\nLAPOBepZdTDUimlpUPtORjiPECcdFoz5w2BE1t8h9tqllVM3Mpmy5cBkseLwKan3\nWNNfQUnSA1esbH55A8uiFycxbpLY09u35h092sy1ImHtvmnTqoBp0J+h6HYRacuI\nEfm31ftYgik5XltCtoVF2Dt/khI+ejhaRSytqscmHQKBgQDv9VjzEN5lHsSv8fh0\nt19m0rC9N/5ZK0tilh7olGmSzz+9M75jAEiGYr5e14p2fE4o5+W93z2tenbGggTy\nxMLs69xs9NKOH3JxE1+M297yqwaHT+na3RjhyWukLgGqlhGYlxorlDAZ3v9zMKC4\n45mkwJ7tqU4oSh7FbShMzFZjbwKBgQDeplvf3xvsgV7yxZ/ozAsqkDQNdDk4NiEM\nHQJsgTyKN7/P6Ws3dxsQ3KCP54ZfrDMA81iNcYz/6HyN29VpJ1WUXtZI38TY/Ytt\nbTcNculBc0O+TbebKIUr4REFZz1HqBlRCQPtuwPQziPa/gByALj077Ks/Yl5ekqv\nMZ5V8JgELQKBgAeYAhqfHAqjMKJIzA4Vh4VfgYxba0czIY2bJptBpx2oRWIdcxb6\n+VCXa2Lg+1bIlEijHhgmKnOE/qFFmBZ+t5R72lvwW4F36U0+ybVRd/rCAtDhbIsq\nmBD9KNTnR9I4MZJcpc1fQS5wajEhBtUTDtex6NWol/qabeLdk3rqtIktAoGAOUIj\nIoGoFrx2hIyaQS4oOPv4xvT6uiABg7H6K5lYzlrj8z4eGpeA2GdEy31JK1WHkFkE\njuuCzVUmovzD91TsR0nUZc1WPE+ICc4qeETzA6f25fvqmfZjuRMaY39XXRQ33oUp\nA3wy0QISaoEj8C2LY0I5ew+AyULP7hoelA9ZqMkCgYEA0/8MdO1Pk3XZY4lUfhRV\naQ09t7SIwvbFZWj3cOcxzJdk02cA2TEWxzONmQX5PPHkECFQF5SUDIy+XsQaObuD\nH0MaFD/hRW+xaxW6D8N20Y4YWdQ3o7K0YFN8PygsvQfMkj5k5ioa/cAKR58go4/Q\nlSQ/1/eEc8hArrpr8gSMnt8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "csgo-stats-457a9@appspot.gserviceaccount.com",
+  "client_id": "113034744437435967680",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/csgo-stats-457a9%40appspot.gserviceaccount.com"
+}
