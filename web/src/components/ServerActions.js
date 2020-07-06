@@ -76,39 +76,62 @@ const ServerActions = ({ id }) => {
       .doc("status")
       .set({
         ...status,
-        state: "OFF",
+        state: "STOPPING",
       });
+
+    setTimeout(() => {
+      firestore
+        .collection("config")
+        .doc("status")
+        .set({
+          ...status,
+          state: "OFF",
+        });
+    }, 3000);
   };
 
-  if (status.state === "OFF") {
-    return (
-      <Row>
-        <Col>
-          <Button onClick={StartServer}>{"Start server"}</Button>
-        </Col>
-      </Row>
-    );
-  } else if (status.state === "STARTING") {
-    return (
-      <Row>
-        <Col>
-          {"STARTING"}
-          <Spinner color={"primary"} />
-        </Col>
-      </Row>
-    );
-  } else if (status.state === "ON") {
-    return (
-      <Row>
-        <Col>
-          {`Server running: ${status.ip}`}
-          <Button onClick={StopServer}>{"Stop server"}</Button>
-        </Col>
-      </Row>
-    );
-  } else {
+  const renderContent = (status) => {
+    if (status.state === "OFF") {
+      return (
+        <Button onClick={StartServer} className="ml-3 ">
+          {"Start server"}
+        </Button>
+      );
+    } else if (status.state === "STARTING") {
+      return (
+        <div>
+          {"Turning On"}
+          <Spinner color={"primary"} className="ml-3 " />
+        </div>
+      );
+    } else if (status.state === "ON") {
+      return (
+        <div className="d-flex ">
+          <div className="d-flex flex-column">
+            <div>{"Server running"}</div>
+            <div>{status.ip}</div>
+          </div>
+          <Button onClick={StopServer} className="ml-3 ">
+            {"Stop server"}
+          </Button>
+        </div>
+      );
+    } else if (status.state === "STOPPING") {
+      return (
+        <div>
+          {"Turning Off"}
+          <Spinner color={"primary"} className="ml-3 " />
+        </div>
+      );
+    }
     return null;
-  }
+  };
+
+  return (
+    <Row>
+      <Col>{renderContent(status)}</Col>
+    </Row>
+  );
 };
 
 export default ServerActions;
