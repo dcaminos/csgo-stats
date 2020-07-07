@@ -5,7 +5,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import { getMatchesList } from "selectors";
+import { getMatchesList } from "selectors/rankingSelectors";
 
 const MatchesPage = () => {
   useFirestoreConnect(() => [{ collection: "matches" }]);
