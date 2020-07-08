@@ -2,14 +2,18 @@
 //Dgram for handling udp server logs being sent in
 const dgram = require("dgram");
 const socket = dgram.createSocket("udp4");
+const firestore = require("./firestore");
 
 //Log line parsing utility
 const parser = require("./parseMessage");
+
+firestore.initServer();
 
 //On udp socket receiving a message
 socket.on("message", function (message) {
   parser.parseMessage(message);
 });
+
 //Indicate in console that the udp socket is listening
 socket.on("listening", function () {
   var address = socket.address();
@@ -17,5 +21,6 @@ socket.on("listening", function () {
     "UDP Server listening on " + address.address + ":" + address.port
   );
 });
+
 //Listen for udp on port:
 socket.bind(3001);

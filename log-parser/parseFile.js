@@ -1,7 +1,8 @@
 const fs = require("fs");
 const readline = require("readline");
 const parser = require("./parseMessage");
-const FILE_NAME = "./Data/L172_031_041_090_27015_202006292033_000.log";
+
+const FILE_NAME = "./Data/L172_031_041_090_27015_202007051939_000.log";
 
 async function processLineByLine() {
   const fileStream = fs.createReadStream(FILE_NAME);
