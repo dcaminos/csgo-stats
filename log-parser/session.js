@@ -74,6 +74,8 @@ const kill = (event) => {
     event.data.weapon
   );
 
+  source.kills++;
+  target.deaths++;
   kill.count++;
   if (event.data.headshot) {
     source.headshots++;

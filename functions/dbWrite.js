@@ -30,7 +30,7 @@ const aggregateRank = (transaction, data, match) => {
 exports.aggregateRank = aggregateRank;
 
 const aggregateNewRank = (transaction, data, match) => {
-  const dbRank = { ...data.rank };
+  const dbRank = Object.assign({}, data.rank);
   dbRank.users = match.users.map((user) => {
     const prevPositionElement = data.prevPositions.find(
       (e) => e.id === user.id
@@ -62,7 +62,7 @@ const aggregateNewRank = (transaction, data, match) => {
 };
 
 const aggregateOldRank = (transaction, data, match) => {
-  const dbRank = { ...data.rank };
+  const dbRank = Object.assign({}, data.rank);
   match.users.forEach((user) => {
     dbUser = dbRank.users.find((dbUser) => dbUser.id === user.id);
     if (dbUser === undefined) {
