@@ -1,9 +1,21 @@
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
-const cors = require("cors");
 
+//Cloud
 admin.initializeApp(functions.config().firebase);
-let db = admin.firestore();
+
+//Local
+/*let serviceAccount = require("../log-parser/csgo-stats-457a9-4aacb43cb750.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});*/
+
+const onWriteMatches = require("./onWriteMatches");
+
+exports.onWriteMatches = onWriteMatches.main;
+
+//OLD IMPLEMENTATIONS
+const cors = require("cors");
 
 exports.progress = functions.https.onRequest((request, response) => {
   return cors()(request, response, () => {

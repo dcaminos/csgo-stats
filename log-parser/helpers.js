@@ -2,7 +2,9 @@ const getMatchId = (date, map) =>
   date.toISOString().substring(0, 19).replace("T", "__") + "__" + map;
 
 const getRankId = (date) =>
-  `${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getFullYear()}`;
+  `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${
+    date.getDay() < 15 ? "1" : "2"
+  }`;
 
 const findPlayer = (matchData, playerId) => {
   let user = matchData.users.find((user) => user.id === playerId);
@@ -15,63 +17,38 @@ const findPlayer = (matchData, playerId) => {
       assists: 0,
       deaths: 0,
       headshots: 0,
-      _kills: [],
-      _deaths: [],
-      _damages: [],
     };
     matchData.users.push(user);
   }
   return user;
 };
 
-const findKill = (kills, target, weapon) => {
-  let kill = kills.find(
-    (kill) => kill.target === target && kill.weapon === weapon
+const findKill = (matchData, source, target, weapon) => {
+  let kill = matchData.kills.find(
+    (kill) => kill.id === `${source}-${target}-${weapon}`
   );
   if (kill === undefined) {
     kill = {
-      target: target,
-      weapon: weapon,
+      id: `${source}-${target}-${weapon}`,
       count: 0,
       headshots: 0,
     };
-    kills.push(kill);
+    matchData.kills.push(kill);
   }
   return kill;
 };
 
-const findDeath = (deaths, source, weapon) => {
-  let death = deaths.find(
-    (death) => death.source === source && death.weapon === weapon
-  );
-  if (death === undefined) {
-    death = {
-      source: source,
-      weapon: weapon,
-      count: 0,
-      headshots: 0,
-    };
-    deaths.push(death);
-  }
-  return death;
-};
-
-const findDamage = (damages, target, weapon, hitgroup) => {
-  let damage = damages.find(
-    (damage) =>
-      damage.target === target &&
-      damage.weapon === weapon &&
-      damage.hitgroup === hitgroup
+const findDamage = (matchData, source, weapon, hitgroup) => {
+  let damage = matchData.damages.find(
+    (damage) => damage.id === `${source}-${weapon}-${hitgroup.trim()}`
   );
   if (damage === undefined) {
     damage = {
-      target: target,
-      weapon: weapon,
-      hitgroup: hitgroup,
+      id: `${source}-${weapon}-${hitgroup.trim()}`,
       count: 0,
       dealt: 0,
     };
-    damages.push(damage);
+    matchData.damages.push(damage);
   }
   return damage;
 };
@@ -94,7 +71,6 @@ module.exports = {
   getRankId: getRankId,
   findPlayer: findPlayer,
   findKill: findKill,
-  findDeath: findDeath,
   findDamage: findDamage,
   isFinished: isFinished,
 };

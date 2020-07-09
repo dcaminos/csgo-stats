@@ -19,6 +19,8 @@ const matchStart = (event) => {
     map: map,
     date: date,
     users: [],
+    kills: [],
+    damages: [],
     chats: [],
   };
 };
@@ -65,19 +67,17 @@ const switchedTeam = (event) => {
 const kill = (event) => {
   const source = helpers.findPlayer(matchData, event.data.source.steam);
   const target = helpers.findPlayer(matchData, event.data.target.steam);
+  const kill = helpers.findKill(
+    matchData,
+    source.id,
+    target.id,
+    event.data.weapon
+  );
 
-  source.kills++;
-  const kill = helpers.findKill(source._kills, target.id, event.data.weapon);
   kill.count++;
-
-  target.deaths++;
-  const death = helpers.findDeath(target._deaths, source.id, event.data.weapon);
-  death.count++;
-
   if (event.data.headshot) {
     source.headshots++;
     kill.headshots++;
-    death.headshots++;
   }
 
   source.score += SCORE_KILL;
@@ -87,8 +87,8 @@ const damage = (event) => {
   const source = helpers.findPlayer(matchData, event.data.source.steam);
   const target = helpers.findPlayer(matchData, event.data.target.steam);
   const damage = helpers.findDamage(
-    source._damages,
-    target.id,
+    matchData,
+    source.id,
     event.data.weapon,
     event.data.hitgroup
   );
