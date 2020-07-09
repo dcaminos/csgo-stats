@@ -1,8 +1,20 @@
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
-const cors = require("cors");
 
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+});
+
+admin.firestore().settings({
+  ignoreUndefinedProperties: true,
+});
+
+const onWriteMatches = require("./onWriteMatches");
+
+exports.onWriteMatches = onWriteMatches.main;
+
+//OLD IMPLEMENTATIONS
+const cors = require("cors");
 let db = admin.firestore();
 
 exports.progress = functions.https.onRequest((request, response) => {
