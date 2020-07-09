@@ -11,14 +11,12 @@ const API_GATEWAY_URL =
   "https://3hsdhg6tok.execute-api.sa-east-1.amazonaws.com/test/invocations";
 
 const ServerActions = ({ id }) => {
-  useFirestoreConnect(() => [{ collection: "config", doc: "status" }]);
+  useFirestoreConnect(() => [{ collection: "_config", doc: "status" }]);
   const firestore = useFirestore();
-  const config = useSelector(({ firestore: { data } }) => data.config);
+  const config = useSelector(({ firestore: { data } }) => data._config);
 
   if (!isLoaded(config)) return <Spinner color={"primary"} />;
   const status = config.status;
-
-  console.log(status);
 
   const StartServer = () => {
     const url = new URL(API_GATEWAY_URL);
@@ -42,7 +40,7 @@ const ServerActions = ({ id }) => {
     });
 
     firestore
-      .collection("config")
+      .collection("_config")
       .doc("status")
       .set({
         ...status,
@@ -72,7 +70,7 @@ const ServerActions = ({ id }) => {
     });
 
     firestore
-      .collection("config")
+      .collection("_config")
       .doc("status")
       .set({
         ...status,
@@ -81,13 +79,13 @@ const ServerActions = ({ id }) => {
 
     setTimeout(() => {
       firestore
-        .collection("config")
+        .collection("_config")
         .doc("status")
         .set({
           ...status,
           state: "OFF",
         });
-    }, 3000);
+    }, 8000);
   };
 
   const renderContent = (status) => {
