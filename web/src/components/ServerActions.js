@@ -15,6 +15,7 @@ const ServerActions = ({ id }) => {
   const firestore = useFirestore();
   const config = useSelector(({ firestore: { data } }) => data._config);
 
+  return <a href="steam://connect/18.230.188.177:27015/lages">Iniciar CSGO</a>;
   if (!isLoaded(config)) return <Spinner color={"primary"} />;
   const status = config.status;
 

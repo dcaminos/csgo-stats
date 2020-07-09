@@ -1,24 +1,63 @@
+const path = require("path");
 const fs = require("fs");
 const readline = require("readline");
-const parser = require("./parseMessage");
+const parser = require("./parseline");
+const session = require("./session");
 
-const FILE_NAME = "./Data/L172_031_041_090_27015_202007051939_000.log";
-
-async function processLineByLine() {
-  const fileStream = fs.createReadStream(FILE_NAME);
-
-  const rl = readline.createInterface({
-    input: fileStream,
-    crlfDelay: Infinity,
-  });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
-
-  for await (const line of rl) {
-    // Each line in input.txt will be successively available here as `line`.
-    parser.parseMessage(`_____${line}_`);
-    //console.log(`Line from file: ${line}`);
+async function main(args) {
+  try {
+    const directory = getDirectory(args);
+    const files = fs.readdirSync(directory, { withFileTypes: true });
+    readFiles(directory, files);
+  } catch (error) {
+    console.log(error);
   }
+  return;
 }
 
-processLineByLine();
+const getDirectory = (args) => {
+  if (args.length === 0) {
+    throw "Missing path.";
+  }
+
+  return args[0];
+};
+
+async function readFiles(directory, files) {
+  if (files.length === 0) {
+    return;
+  }
+
+  let startTime = 0;
+  files
+    .filter((file) => file.isFile())
+    .forEach(async (file) => {
+      setTimeout(async function () {
+        console.log("SEND FILE: ", file.name);
+        const fileStream = fs.createReadStream(directory + file.name);
+
+        const rl = readline.createInterface({
+          input: fileStream,
+          crlfDelay: Infinity,
+        });
+
+        for await (const line of rl) {
+          parseMessage(line);
+        }
+      }, startTime);
+      startTime += 1000;
+    });
+}
+
+const parseMessage = (message) => {
+  const msg = message.toString("ascii").trim();
+  const ev = parser.parseLine(msg);
+
+  if (ev !== null) {
+    if (session[ev.type] !== undefined) {
+      session[ev.type](ev);
+    }
+  }
+};
+
+main(process.argv.slice(2));

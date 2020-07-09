@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const FieldValue = admin.firestore.FieldValue;
 let db = admin.firestore();
 
 const aggregateUsers = (transaction, data, match) => {
@@ -37,6 +38,7 @@ const aggregateNewRank = (transaction, data, match) => {
     );
     return {
       id: user.id,
+      name: user.name,
       score: user.score,
       rounds: user.rounds,
       matches: 1,
@@ -71,9 +73,10 @@ const aggregateOldRank = (transaction, data, match) => {
       );
       dbRank.users.push({
         id: user.id,
+        name: user.name,
         score: user.score,
         rounds: user.rounds,
-        matches: user.matches,
+        matches: 1,
         kills: user.kills,
         deaths: user.deaths,
         assists: user.assists,
@@ -84,6 +87,7 @@ const aggregateOldRank = (transaction, data, match) => {
             : null,
       });
     } else {
+      dbUser.name = user.name;
       dbUser.score += user.score;
       dbUser.rounds += user.rounds;
       dbUser.matches += 1;
@@ -106,36 +110,111 @@ const aggregateOldRank = (transaction, data, match) => {
   return transaction.set(rankRef, dbRank);
 };
 
-const aggregateDamages = (transaction, data, match) => {
-  const promises = match.damages.map((damage) => {
-    const dbDamage = data.damages.find((dbDamage) => dbDamage.id === damage.id);
-    dbDamage.count += damage.count;
-    dbDamage.dealt += damage.dealt;
+const aggregateKills = (transaction, data, match) => {
+  const promises = Object.keys(match.kills).map((userId) => {
+    const kill = match.kills[userId];
+    const dbKill = data.kills.find((dbKill) => dbKill.id === userId);
+    dbKill.count += kill.count;
+    dbKill.headshots += kill.headshots;
 
-    var damageRef = db.collection("_damages").doc(damage.id);
-    return transaction.set(damageRef, {
-      count: dbDamage.count,
-      dealt: dbDamage.dealt,
+    Object.keys(kill.targets).forEach((targetId) => {
+      if (dbKill.targets[targetId] === undefined) {
+        dbKill.targets[targetId] = kill.targets[targetId];
+      } else {
+        dbKill.targets[targetId].count += kill.targets[targetId].count;
+        dbKill.targets[targetId].headshots += kill.targets[targetId].headshots;
+      }
     });
+
+    Object.keys(kill.weapons).forEach((weaponId) => {
+      if (dbKill.weapons[weaponId] === undefined) {
+        dbKill.weapons[weaponId] = kill.weapons[weaponId];
+      } else {
+        dbKill.weapons[weaponId].count += kill.weapons[weaponId].count;
+        dbKill.weapons[weaponId].headshots += kill.weapons[weaponId].headshots;
+      }
+    });
+
+    var killRef = db.collection("_kills").doc(userId);
+    return transaction.set(killRef, dbKill);
+  });
+
+  return Promise.all(promises);
+};
+exports.aggregateKills = aggregateKills;
+
+const aggregateDeaths = (transaction, data, match) => {
+  const promises = Object.keys(match.deaths).map((userId) => {
+    const death = match.deaths[userId];
+    const dbDeath = data.deaths.find((dbDeath) => dbDeath.id === userId);
+    dbDeath.count += death.count;
+    dbDeath.headshots += death.headshots;
+
+    Object.keys(death.sources).forEach((sourceId) => {
+      if (dbDeath.sources[sourceId] === undefined) {
+        dbDeath.sources[sourceId] = death.sources[sourceId];
+      } else {
+        dbDeath.sources[sourceId].count += death.sources[sourceId].count;
+        dbDeath.sources[sourceId].headshots +=
+          death.sources[sourceId].headshots;
+      }
+    });
+
+    Object.keys(death.weapons).forEach((weaponId) => {
+      if (dbDeath.weapons[weaponId] === undefined) {
+        dbDeath.weapons[weaponId] = death.weapons[weaponId];
+      } else {
+        dbDeath.weapons[weaponId].count += death.weapons[weaponId].count;
+        dbDeath.weapons[weaponId].headshots +=
+          death.weapons[weaponId].headshots;
+      }
+    });
+
+    var deathRef = db.collection("_deaths").doc(userId);
+    return transaction.set(deathRef, dbDeath);
+  });
+
+  return Promise.all(promises);
+};
+exports.aggregateDeaths = aggregateDeaths;
+
+const aggregateDamages = (transaction, data, match) => {
+  const promises = Object.keys(match.damages).map((userId) => {
+    const damage = match.damages[userId];
+    const dbDamage = data.damages.find((dbDamage) => dbDamage.id === userId);
+
+    Object.keys(damage).forEach((hitgroupId) => {
+      if (dbDamage[hitgroupId] === undefined) {
+        dbDamage[hitgroupId] = damage[hitgroupId];
+      } else {
+        dbDamage[hitgroupId] += damage[hitgroupId];
+      }
+    });
+
+    var damagedRef = db.collection("_damages").doc(userId);
+    return transaction.set(damagedRef, dbDamage);
   });
 
   return Promise.all(promises);
 };
 exports.aggregateDamages = aggregateDamages;
 
-const aggregateKills = (transaction, data, match) => {
-  const promises = match.kills.map((kill) => {
-    const dbKill = data.kills.find((dbKill) => dbKill.id === kill.id);
-    dbKill.count += kill.count;
-    dbKill.headshots += kill.headshots;
-
-    var killRef = db.collection("_kills").doc(kill.id);
-    return transaction.set(killRef, {
-      count: dbKill.count,
-      headshots: dbKill.headshots,
+const updateMatch = (transaction, ref, match) => {
+  const finalKills = [];
+  Object.keys(match.kills).map((sourceId) => {
+    const kill = match.kills[sourceId];
+    Object.keys(kill.targets).map((targetId) => {
+      finalKills.push({
+        s: sourceId,
+        t: targetId,
+      });
     });
   });
 
-  return Promise.all(promises);
+  return transaction.update(ref, {
+    kills: finalKills,
+    deaths: FieldValue.delete(),
+    damages: FieldValue.delete(),
+  });
 };
-exports.aggregateKills = aggregateKills;
+exports.updateMatch = updateMatch;

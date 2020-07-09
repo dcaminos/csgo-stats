@@ -1,14 +1,23 @@
 const publicIp = require("public-ip");
 const admin = require("firebase-admin");
 const SERVER_PORT = "27015";
-let serviceAccount = require("./csgo-stats-457a9-4aacb43cb750.json");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.applicationDefault(),
 });
 
-//For local tests
-//admin.firestore().settings({ host: "localhost:8080", ssl: false });
+const isLocal = process.argv.slice(2)[1];
+if (isLocal && isLocal === "--local") {
+  admin.firestore().settings({
+    ignoreUndefinedProperties: true,
+    host: "localhost:8080",
+    ssl: false,
+  });
+} else {
+  admin.firestore().settings({
+    ignoreUndefinedProperties: true,
+  });
+}
 
 let db = admin.firestore();
 
@@ -38,9 +47,7 @@ const setUserOnline = (userId, value) => {
 };
 
 const sendMatch = (matchData) => {
-  let docRef = db
-    .collection("_matches")
-    .doc(matchData.id + new Date().getTime());
+  let docRef = db.collection("_matches").doc(matchData.id);
   docRef.set(matchData);
 };
 

@@ -19,9 +19,10 @@ const matchStart = (event) => {
     map: map,
     date: date,
     users: [],
-    kills: [],
-    damages: [],
     chats: [],
+    kills: {},
+    deaths: {},
+    damages: {},
   };
 };
 
@@ -43,8 +44,7 @@ const enteredGame = (event) => {
 
 const disconnected = (event) => {
   const userId = event.data.source.steam;
-
-  const index = usersData.findIndexOf((user) => user.id === userId);
+  const index = usersData.findIndex((user) => user.id === userId);
   if (index > -1) {
     usersData.splice(index, 1);
   }
@@ -65,47 +65,46 @@ const switchedTeam = (event) => {
 };
 
 const kill = (event) => {
-  const source = helpers.findPlayer(matchData, event.data.source.steam);
-  const target = helpers.findPlayer(matchData, event.data.target.steam);
-  const kill = helpers.findKill(
-    matchData,
-    source.id,
-    target.id,
-    event.data.weapon
-  );
+  const source = helpers.findPlayer(matchData, event.data.source);
+  const target = helpers.findPlayer(matchData, event.data.target);
+  helpers.checkKill(matchData, source.id, target.id, event.data.weapon);
+  helpers.checkDeadh(matchData, source.id, target.id, event.data.weapon);
 
   source.kills++;
   target.deaths++;
-  kill.count++;
+  matchData.kills[source.id].count++;
+  matchData.kills[source.id].targets[target.id].count++;
+  matchData.kills[source.id].weapons[event.data.weapon].count++;
+  matchData.deaths[target.id].count++;
+  matchData.deaths[target.id].sources[source.id].count++;
+  matchData.deaths[target.id].weapons[event.data.weapon].count++;
   if (event.data.headshot) {
     source.headshots++;
-    kill.headshots++;
+    matchData.kills[source.id].headshots++;
+    matchData.kills[source.id].targets[target.id].headshots++;
+    matchData.kills[source.id].weapons[event.data.weapon].headshots++;
+    matchData.deaths[target.id].headshots++;
+    matchData.deaths[target.id].sources[source.id].headshots++;
+    matchData.deaths[target.id].weapons[event.data.weapon].headshots++;
   }
-
   source.score += SCORE_KILL;
 };
 
 const damage = (event) => {
-  const source = helpers.findPlayer(matchData, event.data.source.steam);
-  const target = helpers.findPlayer(matchData, event.data.target.steam);
-  const damage = helpers.findDamage(
-    matchData,
-    source.id,
-    event.data.weapon,
-    event.data.hitgroup
-  );
-  damage.count++;
-  damage.dealt += event.data.health.dealt;
+  const source = helpers.findPlayer(matchData, event.data.source);
+  const hitgroupId = event.data.hitgroup.trim();
+  helpers.checkDamage(matchData, source.id, hitgroupId);
+  matchData.damages[source.id][hitgroupId]++;
 };
 
 const assist = (event) => {
-  const source = helpers.findPlayer(matchData, event.data.source.steam);
+  const source = helpers.findPlayer(matchData, event.data.source);
   source.assists++;
   source.score += SCORE_ASSIST;
 };
 
 const say = (event) => {
-  const source = helpers.findPlayer(matchData, event.data.source.steam);
+  const source = helpers.findPlayer(matchData, event.data.source);
   matchData.chats.push({
     source: source.id,
     type: event.type,
@@ -115,7 +114,7 @@ const say = (event) => {
 };
 
 const playerTriggered = (event) => {
-  const source = helpers.findPlayer(matchData, event.data.source.steam);
+  const source = helpers.findPlayer(matchData, event.data.source);
   if (event.data.action === "Planted_The_Bomb") {
     source.score += SCORE_BOMB_PLANTED;
   }
@@ -127,8 +126,10 @@ const playerTriggered = (event) => {
 const roundEnd = (event) => {
   usersData.forEach((user) => {
     if (user.team === "TERRORIST" || user.team === "CT") {
-      const player = helpers.findPlayer(matchData, user.id);
-      player.rounds++;
+      const player = helpers.findPlayerById(matchData, user.id);
+      if (player !== undefined) {
+        player.rounds++;
+      }
     }
   });
 };
@@ -139,14 +140,14 @@ const gameOver = (event) => {
 
   usersData.forEach((user) => {
     if (user.team === "TERRORIST" || user.team === "CT") {
-      const player = helpers.findPlayer(matchData, user.id);
-      player.name = user.name;
-      player.team = user.team;
+      const player = helpers.findPlayerById(matchData, user.id);
+      if (player !== undefined) {
+        player.team = user.team;
+      }
     }
   });
 
   if (helpers.isFinished(matchData)) {
-    console.log(matchData);
     firestore.sendMatch(matchData);
   }
 };

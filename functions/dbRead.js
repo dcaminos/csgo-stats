@@ -63,7 +63,7 @@ const getPrevPositions = (transaction, match) => {
       return dbPrevRank.users
         .map((user) => ({
           id: user.id,
-          rank: u.score / u.rounds,
+          rank: user.score / user.rounds,
         }))
         .sort((a, b) => b.rank - a.rank)
         .map((user, index) => ({
@@ -89,48 +89,20 @@ const getPrevRankId = (rankId) => {
   }
 };
 
-const getDamages = (transaction, match) => {
-  const promises = match.damages.map((damage) => {
-    var damageRef = db.collection("_damages").doc(damage.id);
-    return transaction.get(damageRef).then((doc) => {
-      if (!doc.exists) {
-        return {
-          id: damage.id,
-          count: 0,
-          dealt: 0,
-        };
-      } else {
-        dbDamage = doc.data();
-        return {
-          id: damage.id,
-          count: dbDamage.count,
-          dealt: dbDamage.dealt,
-        };
-      }
-    });
-  });
-
-  return Promise.all(promises);
-};
-exports.getDamages = getDamages;
-
 const getKills = (transaction, match) => {
-  const promises = match.kills.map((kill) => {
-    var killRef = db.collection("_kills").doc(kill.id);
+  const promises = match.users.map((user) => {
+    var killRef = db.collection("_kills").doc(user.id);
     return transaction.get(killRef).then((doc) => {
       if (!doc.exists) {
         return {
-          id: kill.id,
+          id: user.id,
+          targets: {},
+          weapons: {},
           count: 0,
           headshots: 0,
         };
       } else {
-        dbKill = doc.data();
-        return {
-          id: kill.id,
-          count: dbKill.count,
-          headshots: dbKill.headshots,
-        };
+        return doc.data();
       }
     });
   });
@@ -138,3 +110,43 @@ const getKills = (transaction, match) => {
   return Promise.all(promises);
 };
 exports.getKills = getKills;
+
+const getDeaths = (transaction, match) => {
+  const promises = match.users.map((user) => {
+    var deathRef = db.collection("_deaths").doc(user.id);
+    return transaction.get(deathRef).then((doc) => {
+      if (!doc.exists) {
+        return {
+          id: user.id,
+          sources: {},
+          weapons: {},
+          count: 0,
+          headshots: 0,
+        };
+      } else {
+        return doc.data();
+      }
+    });
+  });
+
+  return Promise.all(promises);
+};
+exports.getDeaths = getDeaths;
+
+const getDamages = (transaction, match) => {
+  const promises = match.users.map((user) => {
+    var killRef = db.collection("_damages").doc(user.id);
+    return transaction.get(killRef).then((doc) => {
+      if (!doc.exists) {
+        return {
+          id: user.id,
+        };
+      } else {
+        return doc.data();
+      }
+    });
+  });
+
+  return Promise.all(promises);
+};
+exports.getDamages = getDamages;
