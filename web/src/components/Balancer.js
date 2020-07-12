@@ -3,6 +3,8 @@ import BalancerTeam from "components/BalancerTeam";
 import ModalSetTeams from "components/ModalSetTeams";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
+import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
 import { Button, Col, Row } from "reactstrap";
 
 const Balancer = ({ players }) => {
@@ -10,6 +12,9 @@ const Balancer = ({ players }) => {
   players.forEach((player) => {
     initActives[player.id] = player.online;
   });
+
+  useFirestoreConnect(() => [{ collection: "_config", doc: "status" }]);
+  const config = useSelector(({ firestore: { data } }) => data._config);
 
   const [actives, setActives] = useState(initActives);
   const [teamA, setTeamA] = useState([]);
@@ -67,10 +72,14 @@ const Balancer = ({ players }) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Row>
         <Col className={"d-flex justify-content-end"}>
-          <Button onClick={() => setShowModal(true)}>{"Apply teams"}</Button>
+          {isLoaded(config) && config.status.state === "ON" && (
+            <Button onClick={() => setShowModal(true)}>{"Apply teams"}</Button>
+          )}
           <ModalSetTeams
             isOpen={showModal}
             toggle={() => setShowModal(false)}
+            teamA={teamA}
+            teamB={teamB}
           />
         </Col>
       </Row>

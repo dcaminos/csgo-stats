@@ -13,11 +13,13 @@ const onWriteMatches = require("./onWriteMatches");
 const checkServerStatus = require("./checkServerStatus");
 const startServer = require("./startServer");
 const stopServer = require("./stopServer");
+const setTeams = require("./setTeams");
 
 exports.onWriteMatches = onWriteMatches.main;
 exports.checkServerStatus = checkServerStatus.main;
 exports.startServer = startServer.main;
 exports.stopServer = stopServer.main;
+exports.setTeams = setTeams.main;
 
 //OLD IMPLEMENTATIONS
 const cors = require("cors");

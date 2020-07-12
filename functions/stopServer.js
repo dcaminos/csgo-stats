@@ -17,20 +17,12 @@ exports.main = functions.https.onRequest((request, response) => {
       instanceId: INSTANCE_ID,
     };
 
-    fetch(url, {
+    return fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Credentials": true,
-      },
     })
-      .then(() => {
+      .then((res) => {
+        response.send(res);
         return db
           .collection("_config")
           .doc("status")
@@ -38,7 +30,7 @@ exports.main = functions.https.onRequest((request, response) => {
       })
       .catch((error) => {
         response.send(error);
-        return Promise.resolve();
+        return;
       });
   });
 });

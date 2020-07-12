@@ -3,7 +3,7 @@ export const getPlayers = (state) => {
     return undefined;
   }
 
-  return Object.keys(state.firestore.data._users)
+  return Object.keys(state.firestore.data._users || [])
     .map((userId) => {
       const user = state.firestore.data._users[userId];
       return {
