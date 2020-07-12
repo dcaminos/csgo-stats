@@ -10,8 +10,14 @@ admin.firestore().settings({
 });
 
 const onWriteMatches = require("./onWriteMatches");
+const checkServerStatus = require("./checkServerStatus");
+const startServer = require("./startServer");
+const stopServer = require("./stopServer");
 
 exports.onWriteMatches = onWriteMatches.main;
+exports.checkServerStatus = checkServerStatus.main;
+exports.startServer = startServer.main;
+exports.stopServer = stopServer.main;
 
 //OLD IMPLEMENTATIONS
 const cors = require("cors");

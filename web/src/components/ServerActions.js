@@ -1,136 +1,40 @@
+import { startServer } from "actions/cloudFunctions";
 import React from "react";
-import { useSelector } from "react-redux";
-import {
-  isLoaded,
-  useFirestore,
-  useFirestoreConnect,
-} from "react-redux-firebase";
-import { Button, Col, Row, Spinner } from "reactstrap";
-
-const API_GATEWAY_URL =
-  "https://3hsdhg6tok.execute-api.sa-east-1.amazonaws.com/test/invocations";
+import { FaSteam } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
+import { Button, Spinner } from "reactstrap";
 
 const ServerActions = ({ id }) => {
+  const dispatch = useDispatch();
   useFirestoreConnect(() => [{ collection: "_config", doc: "status" }]);
-  const firestore = useFirestore();
   const config = useSelector(({ firestore: { data } }) => data._config);
+  const isLoading = useSelector((state) => state.cloudFunctions.isLoading);
 
-  return <a href="steam://connect/18.230.188.177:27015/lages">Iniciar CSGO</a>;
-  if (!isLoaded(config)) return <Spinner color={"primary"} />;
-  const status = config.status;
+  if (isLoaded(config) && isLoading == false) {
+    const status = config.status;
 
-  const StartServer = () => {
-    const url = new URL(API_GATEWAY_URL);
-    var data = {
-      action: "start",
-      instanceId: "i-03fc606c65cc6a1c6",
-    };
-
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Credentials": true,
-      },
-    });
-
-    firestore
-      .collection("_config")
-      .doc("status")
-      .set({
-        ...status,
-        state: "STARTING",
-      });
-  };
-
-  const StopServer = () => {
-    const url = new URL(API_GATEWAY_URL);
-    var data = {
-      action: "stop",
-      instanceId: "i-03fc606c65cc6a1c6",
-    };
-
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Methods": "*",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers":
-          "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-        "Access-Control-Allow-Credentials": true,
-      },
-    });
-
-    firestore
-      .collection("_config")
-      .doc("status")
-      .set({
-        ...status,
-        state: "STOPPING",
-      });
-
-    setTimeout(() => {
-      firestore
-        .collection("_config")
-        .doc("status")
-        .set({
-          ...status,
-          state: "OFF",
-        });
-    }, 8000);
-  };
-
-  const renderContent = (status) => {
-    if (status.state === "OFF") {
-      return (
-        <Button onClick={StartServer} className="ml-3 ">
-          {"Start server"}
+    const ButtonPlay = () => (
+      <a href={`steam://connect/${status.ip}/lages`}>
+        <Button onClick={() => {}}>
+          <FaSteam className="h2 mr-2 mb-0" />
+          {"Play CS:GO"}
         </Button>
-      );
-    } else if (status.state === "STARTING") {
-      return (
-        <div>
-          {"Turning On"}
-          <Spinner color={"primary"} className="ml-3 " />
-        </div>
-      );
-    } else if (status.state === "ON") {
-      return (
-        <div className="d-flex ">
-          <div className="d-flex flex-column">
-            <div>{"Server running"}</div>
-            <div>{status.ip}</div>
-          </div>
-          <Button onClick={StopServer} className="ml-3 ">
-            {"Stop server"}
-          </Button>
-        </div>
-      );
-    } else if (status.state === "STOPPING") {
-      return (
-        <div>
-          {"Turning Off"}
-          <Spinner color={"primary"} className="ml-3 " />
-        </div>
-      );
-    }
-    return null;
-  };
+      </a>
+    );
 
-  return (
-    <Row>
-      <Col>{renderContent(status)}</Col>
-    </Row>
-  );
+    const ButtonStart = () => (
+      <Button onClick={() => dispatch(startServer())}>{"Start Server"}</Button>
+    );
+
+    if (status.state === "ON") {
+      return <ButtonPlay />;
+    } else if (status.state === "OFF") {
+      return <ButtonStart />;
+    }
+  }
+
+  return <Spinner color={"primary"} className="ml-3 " />;
 };
 
 export default ServerActions;

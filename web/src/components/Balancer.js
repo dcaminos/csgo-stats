@@ -1,17 +1,20 @@
 import BalancerPlayers from "components/BalancerPlayers";
 import BalancerTeam from "components/BalancerTeam";
+import ModalSetTeams from "components/ModalSetTeams";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Col, Row } from "reactstrap";
+import { Button, Col, Row } from "reactstrap";
+
 const Balancer = ({ players }) => {
   const initActives = {};
   players.forEach((player) => {
-    initActives[player.id] = false;
+    initActives[player.id] = player.online;
   });
 
   const [actives, setActives] = useState(initActives);
   const [teamA, setTeamA] = useState([]);
   const [teamB, setTeamB] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setTeams(players, actives, setTeamA, setTeamB);
@@ -62,6 +65,15 @@ const Balancer = ({ players }) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <Row>
+        <Col className={"d-flex justify-content-end"}>
+          <Button onClick={() => setShowModal(true)}>{"Apply teams"}</Button>
+          <ModalSetTeams
+            isOpen={showModal}
+            toggle={() => setShowModal(false)}
+          />
+        </Col>
+      </Row>
       <Row>
         <Col md="6" sm="6" xs="12">
           <BalancerPlayers

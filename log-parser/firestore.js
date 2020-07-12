@@ -1,13 +1,13 @@
 const publicIp = require("public-ip");
 const admin = require("firebase-admin");
-const SERVER_PORT = "27015";
+const SERVER_PORT = 27015;
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
 });
 
-const isLocal = process.argv.slice(2)[1];
-if (isLocal && isLocal === "--local") {
+const args = process.argv.slice(2);
+if (args.includes("--local")) {
   admin.firestore().settings({
     ignoreUndefinedProperties: true,
     host: "localhost:8080",
@@ -27,7 +27,8 @@ const initServer = () => {
     let docRef = db.collection("_config").doc("status");
     docRef.set({
       state: "ON",
-      ip: `${ip}:${SERVER_PORT}`,
+      ip: ip,
+      port: SERVER_PORT,
     });
   });
 
