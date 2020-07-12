@@ -30,9 +30,7 @@ const BalancerTeam = ({ id, color, title, team }) => {
                       {...provided.dragHandleProps}
                     >
                       <h3>
-                        <Badge color={color}>
-                          {`${player.name} (${player.rank})`}
-                        </Badge>
+                        <Badge color={color}>{player.name}</Badge>
                       </h3>
                     </div>
                   )}

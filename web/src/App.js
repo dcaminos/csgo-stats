@@ -1,3 +1,4 @@
+import { checkServerStatus } from "actions/cloudFunctions";
 import { fetchRankingAction } from "actions/ranking";
 import PageSpinner from "components/PageSpinner";
 import React, { useEffect } from "react";
@@ -9,13 +10,15 @@ import MainLayout from "./components/Layout/MainLayout";
 import BalancerPage from "./pages/Balancer";
 import MatchPage from "./pages/Match";
 import MatchesPage from "./pages/Matches";
-import RankingPage from "./pages/Ranking";
 import ProgressPage from "./pages/Progress";
+import RankingPage from "./pages/Ranking";
 import "./styles/reduction.scss";
 
 const App = ({ breakpoint }) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
+    dispatch(checkServerStatus());
     dispatch(fetchRankingAction());
   }, []);
 

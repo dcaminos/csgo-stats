@@ -8,8 +8,9 @@ import {
   firebaseReducer,
   ReactReduxFirebaseProvider,
 } from "react-redux-firebase";
-import rankingReducer from "reducers/ranking";
+import cloudFunctionsReducer from "reducers/cloudFunctions";
 import progressReducer from "reducers/progress";
+import rankingReducer from "reducers/ranking";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import { createFirestoreInstance, firestoreReducer } from "redux-firestore"; // <- needed if using firestore
 import thunkMiddleware from "redux-thunk";
@@ -37,10 +38,18 @@ firebase.initializeApp(firebaseConfig);
 // Initialize other services on firebase instance
 firebase.firestore(); // <- needed if using firestore
 
+if (process.env.NODE_ENV === "development") {
+  firebase.firestore().settings({
+    host: "localhost:8080",
+    ssl: false,
+  });
+}
+
 // Add firebase to reducers
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer, // <- needed if using firestore
+  cloudFunctions: cloudFunctionsReducer,
   ranking: rankingReducer,
   progress: progressReducer,
 });

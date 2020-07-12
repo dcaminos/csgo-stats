@@ -3,15 +3,18 @@ import Page from "components/Page";
 import PageSpinner from "components/PageSpinner";
 import React from "react";
 import { useSelector } from "react-redux";
-import { getRanking } from "selectors/rankingSelectors";
+import { useFirestoreConnect } from "react-redux-firebase";
+import { getPlayers } from "selectors/balancer";
 
 const BalancerPage = () => {
-  const ranking = useSelector(getRanking);
+  useFirestoreConnect(() => [{ collection: "_users" }]);
+  const players = useSelector(getPlayers);
 
-  if (ranking.isLoading) return <PageSpinner />;
+  if (players === undefined) return <PageSpinner />;
+
   return (
     <Page title={"Balancer"}>
-      <Balancer players={ranking.data} />
+      <Balancer players={players} />
     </Page>
   );
 };
