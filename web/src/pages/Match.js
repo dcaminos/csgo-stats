@@ -1,4 +1,4 @@
-import Page from "components/Page";
+/*import Page from "components/Page";
 import PageSpinner from "components/PageSpinner";
 import TeamResults from "components/TeamResults";
 import React from "react";
@@ -36,3 +36,4 @@ const MatchPage = ({ id }) => {
 };
 
 export default MatchPage;
+*/

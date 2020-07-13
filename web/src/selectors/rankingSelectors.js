@@ -1,3 +1,46 @@
+export const getRankList = ({ firestore: { data } }) => {
+  if (data._config === undefined) {
+    return undefined;
+  }
+
+  if (data._config.items === undefined) {
+    return undefined;
+  }
+
+  return data._config.items.ranks;
+};
+
+export const getRank = (state, rankId) => {
+  if (state.firestore.data._ranks === undefined) {
+    return undefined;
+  }
+
+  if (state.firestore.data._ranks[rankId] === undefined) {
+    return undefined;
+  }
+
+  return state.firestore.data._ranks[rankId].users
+    .map(parseRanking)
+    .sort((a, b) => b.rank - a.rank)
+    .map((player, index) => ({ ...player, position: index + 1 }));
+};
+
+export const parseRanking = (player, index) => {
+  const rank = Number(player.score / player.rounds);
+  return {
+    ...player,
+    kills: `${(player.kills / player.rounds).toFixed(3).replace(".", ",")}`,
+    deaths: `${(player.deaths / player.rounds).toFixed(3).replace(".", ",")}`,
+    assists: `${(player.assists / player.rounds).toFixed(3).replace(".", ",")}`,
+    headshots: `${(player.headshots / player.rounds)
+      .toFixed(3)
+      .replace(".", ",")}`,
+    rank: rank,
+    rankText: `${rank.toFixed(3).replace(".", ",")}`,
+  };
+};
+
+/*
 import moment from "moment";
 
 export const getMatchesList = ({ firestore: { data } }) => {
@@ -71,18 +114,7 @@ export const getRanking = (state) => {
   };
 };
 
-export const parseRanking = (player, index) => {
-  const rank = Number(player.score / player.rounds);
-  return {
-    ...player,
-    kills: `${(player.kills / player.rounds).toFixed(3).replace(".", ",")}`,
-    deaths: `${(player.deaths / player.rounds).toFixed(3).replace(".", ",")}`,
-    assists: `${(player.assists / player.rounds).toFixed(3).replace(".", ",")}`,
-    headshotKills: `${(player.headshotKills / player.rounds)
-      .toFixed(3)
-      .replace(".", ",")}`,
-    mvps: `${(player.mvps / player.rounds).toFixed(3).replace(".", ",")}`,
-    rank: rank,
-    rankText: `${rank.toFixed(3).replace(".", ",")}`,
-  };
-};
+
+
+
+*/

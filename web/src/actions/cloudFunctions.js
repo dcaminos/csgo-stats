@@ -3,9 +3,9 @@ export const FETCH_START_SERVER_SUCCESS = "FETCH_START_SERVER_SUCCESS";
 export const FETCH_START_SERVER_ERROR = "FETCH_START_SERVER_ERROR";
 
 let API_URL = "https://us-central1-csgo-stats-457a9.cloudfunctions.net/";
-if (process.env.NODE_ENV === "development") {
+/*if (process.env.NODE_ENV === "development") {
   API_URL = "http://localhost:5001/csgo-stats-457a9/us-central1/";
-}
+}*/
 
 const CHECK_SERVER_STATUS = "checkServerStatus";
 const START_SERVER = "startServer";

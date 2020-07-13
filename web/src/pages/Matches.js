@@ -1,4 +1,4 @@
-import MatchesTable from "components/MatchesTable";
+/*import MatchesTable from "components/MatchesTable";
 import Page from "components/Page";
 import PageSpinner from "components/PageSpinner";
 import React from "react";
@@ -29,3 +29,4 @@ const MatchesPage = () => {
 };
 
 export default MatchesPage;
+*/
