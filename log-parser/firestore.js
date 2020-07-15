@@ -1,6 +1,6 @@
 const publicIp = require("public-ip");
 const admin = require("firebase-admin");
-const SERVER_PORT = 27015;
+const rcon = require("./rcon");
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -28,7 +28,7 @@ const initServer = () => {
     docRef.set({
       state: "ON",
       ip: ip,
-      port: SERVER_PORT,
+      port: rcon.SERVER_PORT,
     });
   });
 
@@ -52,8 +52,17 @@ const sendMatch = (matchData) => {
   docRef.set(matchData);
 };
 
+const getCurrentConfig = () => {
+  return db
+    .collection("_config")
+    .doc("config")
+    .get()
+    .then((doc) => doc.data());
+};
+
 module.exports = {
   sendMatch: sendMatch,
   initServer: initServer,
   setUserOnline: setUserOnline,
+  getCurrentConfig: getCurrentConfig,
 };

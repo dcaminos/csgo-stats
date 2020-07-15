@@ -1,5 +1,6 @@
 const helpers = require("./helpers");
 const firestore = require("./firestore");
+const rcon = require("./rcon");
 
 const SCORE_KILL = 2;
 const SCORE_ASSIST = 1;
@@ -65,6 +66,10 @@ const switchedTeam = (event) => {
 };
 
 const kill = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   const source = helpers.findPlayer(matchData, event.data.source);
   const target = helpers.findPlayer(matchData, event.data.target);
   helpers.checkKill(matchData, source.id, target.id, event.data.weapon);
@@ -91,6 +96,10 @@ const kill = (event) => {
 };
 
 const damage = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   const source = helpers.findPlayer(matchData, event.data.source);
   const hitgroupId = event.data.hitgroup.trim();
   helpers.checkDamage(matchData, source.id, hitgroupId);
@@ -98,12 +107,20 @@ const damage = (event) => {
 };
 
 const assist = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   const source = helpers.findPlayer(matchData, event.data.source);
   source.assists++;
   source.score += SCORE_ASSIST;
 };
 
 const say = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   const source = helpers.findPlayer(matchData, event.data.source);
   matchData.chats.push({
     source: source.id,
@@ -114,6 +131,10 @@ const say = (event) => {
 };
 
 const playerTriggered = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   const source = helpers.findPlayer(matchData, event.data.source);
   if (event.data.action === "Planted_The_Bomb") {
     source.score += SCORE_BOMB_PLANTED;
@@ -123,7 +144,47 @@ const playerTriggered = (event) => {
   }
 };
 
+const roundStart = (event) => {
+  firestore.getCurrentConfig().then((config) => {
+    const cts = usersData.filter((user) => user.team === "CT");
+    const ts = usersData.filter((user) => user.team === "TERRORIST");
+
+    let command = "";
+    if (config.useRandomGranade) {
+      command += applyRandomBomb("hegrenade", cts);
+      command += applyRandomBomb("hegrenade", ts);
+    }
+    if (config.useRandomMolotov) {
+      command += applyRandomBomb("molotov", cts);
+      command += applyRandomBomb("molotov", ts);
+    }
+    if (config.useRandomFlashbang) {
+      command += applyRandomBomb("flashbang", cts);
+      command += applyRandomBomb("flashbang", ts);
+    }
+    if (config.useRandomSmoke) {
+      command += applyRandomBomb("smokegrenade", cts);
+      command += applyRandomBomb("smokegrenade", ts);
+    }
+
+    rcon.runCommand(command);
+  });
+};
+
+const applyRandomBomb = (bomb, team) => {
+  if (team.length === 0) {
+    return "";
+  }
+
+  const user = team[Math.floor(Math.random() * team.length)];
+  return `sm_give "${user.name}" ${bomb};`;
+};
+
 const roundEnd = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   usersData.forEach((user) => {
     if (user.team === "TERRORIST" || user.team === "CT") {
       const player = helpers.findPlayerById(matchData, user.id);
@@ -135,6 +196,10 @@ const roundEnd = (event) => {
 };
 
 const gameOver = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
   matchData.duration = event.data.duration;
   matchData.score = event.data.score;
 
@@ -163,6 +228,7 @@ module.exports = {
   say: say,
   sayteam: say,
   playertriggered: playerTriggered,
+  roundstart: roundStart,
   roundend: roundEnd,
   gameover: gameOver,
 };

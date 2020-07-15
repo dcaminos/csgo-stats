@@ -1692,6 +1692,13 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+rcon-client@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/rcon-client/-/rcon-client-4.2.0.tgz#dbd4de7a06eccaf3988b94abe17fe1ac51665cda"
+  integrity sha512-PXoGQiO6ztssnveLkY/AqMnokuzv+Ml8Zij65fYQ98N873KP2eiV+DbN3rijC7vfMgyy2DSKZ2gjoGD9iCPjVg==
+  dependencies:
+    typed-emitter "^0.1.0"
+
 "readable-stream@2 || 3", readable-stream@^3.0.2, readable-stream@^3.1.1, readable-stream@^3.4.0:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-3.6.0.tgz#337bbda3adc0706bd3e024426a286d4b4b2c9198"
@@ -1981,6 +1988,11 @@ type-is@~1.6.17, type-is@~1.6.18:
   dependencies:
     media-typer "0.3.0"
     mime-types "~2.1.24"
+
+typed-emitter@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/typed-emitter/-/typed-emitter-0.1.0.tgz#ca532f100ccbf850e3a73b8ebf43d43e4f1f3849"
+  integrity sha512-Tfay0l6gJMP5rkil8CzGbLthukn+9BN/VXWcABVFPjOoelJ+koW8BuPZYk+h/L+lEeIp1fSzVRiWRPIjKVjPdg==
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"
