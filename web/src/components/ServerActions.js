@@ -11,7 +11,7 @@ const ServerActions = ({ id }) => {
   const config = useSelector(({ firestore: { data } }) => data._config);
   const isLoading = useSelector((state) => state.cloudFunctions.isLoading);
 
-  if (isLoaded(config) && isLoading == false) {
+  if (isLoaded(config) && isLoading === false) {
     const status = config.status;
 
     const ButtonPlay = () => (

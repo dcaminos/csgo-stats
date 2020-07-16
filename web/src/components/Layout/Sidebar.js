@@ -1,7 +1,7 @@
 import logo200Image from "assets/img/logo_200.png";
 import sidebarBgImage from "assets/img/sidebar.jpg";
 import React from "react";
-import { FaChartLine, FaDivide, FaList, FaUsers } from "react-icons/fa";
+import { FaChartLine, FaDivide, FaUsers } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { Nav, Navbar, NavItem, NavLink as BSNavLink } from "reactstrap";
 import bn from "utils/bemnames";
@@ -14,7 +14,6 @@ const sidebarBackground = {
 
 const navItems = [
   { to: "/", name: "ranking", exact: true, Icon: FaUsers },
-  { to: "/matches", name: "matches", exact: false, Icon: FaList },
   { to: "/balancer", name: "balancer", exact: false, Icon: FaDivide },
   { to: "/stats", name: "stats", exact: false, Icon: FaChartLine },
 ];

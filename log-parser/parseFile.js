@@ -28,34 +28,29 @@ async function readFiles(directory, files) {
     return;
   }
 
-  let startTime = 0;
-  files
-    .filter((file) => file.isFile())
-    .forEach(async (file) => {
-      setTimeout(async function () {
-        console.log("SEND FILE: ", file.name);
-        const fileStream = fs.createReadStream(directory + file.name);
+  const _files = files.filter((file) => file.isFile());
 
-        const rl = readline.createInterface({
-          input: fileStream,
-          crlfDelay: Infinity,
-        });
+  for await (const file of _files) {
+    const fileStream = fs.createReadStream(directory + file.name);
 
-        for await (const line of rl) {
-          parseMessage(line);
-        }
-      }, startTime);
-      startTime += 1000;
+    const rl = readline.createInterface({
+      input: fileStream,
+      crlfDelay: Infinity,
     });
+
+    for await (const line of rl) {
+      await parseMessage(line);
+    }
+  }
 }
 
-const parseMessage = (message) => {
+const parseMessage = async (message) => {
   const msg = message.toString("ascii").trim();
   const ev = parser.parseLine(msg);
 
   if (ev !== null) {
     if (session[ev.type] !== undefined) {
-      session[ev.type](ev);
+      await session[ev.type](ev, true);
     }
   }
 };

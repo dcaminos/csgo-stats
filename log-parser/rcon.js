@@ -35,5 +35,4 @@ const runCommand = (command) => {
 module.exports = {
   SERVER_PORT: SERVER_PORT,
   runCommand: runCommand,
-  setPublicIp: setPublicIp,
 };

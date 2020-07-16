@@ -6,9 +6,14 @@ const SCORE_KILL = 2;
 const SCORE_ASSIST = 1;
 const SCORE_BOMB_PLANTED = 2;
 const SCORE_BOMB_DEFUSED = 2;
+const BOMB_PLANTER_ALIVE = 2;
+const BOMB_PLANTER_DEATH = 1;
+const ALIVE_ON_TARGET = 1;
 
 let matchData = null;
 let usersData = [];
+let bombPlanter = null;
+let bombDefuser = null;
 
 const matchStart = (event) => {
   const map = event.data.map;
@@ -35,12 +40,13 @@ const enteredGame = (event) => {
       id: userId,
       team: "Unassigned",
       name: event.data.source.name,
+      alive: false,
     });
   } else {
     user.team = "Unassigned";
     user.name = event.data.source.name;
   }
-  firestore.setUserOnline(userId, true);
+  return firestore.setUserOnline(userId, true);
 };
 
 const disconnected = (event) => {
@@ -49,7 +55,8 @@ const disconnected = (event) => {
   if (index > -1) {
     usersData.splice(index, 1);
   }
-  firestore.setUserOnline(userId, false);
+
+  return firestore.setUserOnline(userId, false);
 };
 
 const switchedTeam = (event) => {
@@ -69,7 +76,6 @@ const kill = (event) => {
   if (matchData === null) {
     return;
   }
-
   const source = helpers.findPlayer(matchData, event.data.source);
   const target = helpers.findPlayer(matchData, event.data.target);
   helpers.checkKill(matchData, source.id, target.id, event.data.weapon);
@@ -93,6 +99,11 @@ const kill = (event) => {
     matchData.deaths[target.id].weapons[event.data.weapon].headshots++;
   }
   source.score += SCORE_KILL;
+
+  const targetUserData = usersData.find((user) => user.id === target.id);
+  if (targetUserData !== undefined) {
+    targetUserData.alive = false;
+  }
 };
 
 const damage = (event) => {
@@ -130,6 +141,54 @@ const say = (event) => {
   });
 };
 
+const teamTriggered = (event) => {
+  if (matchData === null) {
+    return;
+  }
+
+  if (
+    event.data.action === "SFUI_Notice_Target_Bombed" &&
+    bombPlanter !== null
+  ) {
+    matchData.users.forEach((user) => {
+      const userData = usersData.find((userData) => userData.id === user.id);
+      if (
+        userData !== undefined &&
+        userData.team === "TERRORIST" &&
+        userData.alive &&
+        userData.id !== bombPlanter.steam
+      ) {
+        user.score += ALIVE_ON_TARGET;
+      }
+    });
+
+    const sourceUD = usersData.find((user) => user.id === bombPlanter.steam);
+    if (sourceUD !== undefined) {
+      const source = helpers.findPlayer(matchData, bombPlanter);
+      if (sourceUD.alive) {
+        source.score += BOMB_PLANTER_ALIVE;
+      } else {
+        source.score += BOMB_PLANTER_DEATH;
+      }
+    }
+  } else if (
+    event.data.action === "SFUI_Notice_Bomb_Defused" &&
+    bombDefuser != null
+  ) {
+    matchData.users.forEach((user) => {
+      const userData = usersData.find((userData) => userData.id === user.id);
+      if (
+        userData !== undefined &&
+        userData.team === "CT" &&
+        userData.alive &&
+        userData.id !== bombDefuser.steam
+      ) {
+        user.score += ALIVE_ON_TARGET;
+      }
+    });
+  }
+};
+
 const playerTriggered = (event) => {
   if (matchData === null) {
     return;
@@ -137,15 +196,25 @@ const playerTriggered = (event) => {
 
   const source = helpers.findPlayer(matchData, event.data.source);
   if (event.data.action === "Planted_The_Bomb") {
+    bombPlanter = event.data.source;
     source.score += SCORE_BOMB_PLANTED;
-  }
-  if (event.data.action === "Defused_The_Bomb") {
+  } else if (event.data.action === "Defused_The_Bomb") {
+    bombDefuser = event.data.source;
     source.score += SCORE_BOMB_DEFUSED;
   }
 };
 
-const roundStart = (event) => {
-  firestore.getCurrentConfig().then((config) => {
+const roundStart = (event, fromFile) => {
+  if (fromFile === true) {
+    return Promise.resolve();
+  }
+  usersData.forEach((user) => (user.alive = true));
+
+  return firestore.getCurrentConfig().then((config) => {
+    if (config === undefined) {
+      return;
+    }
+
     const cts = usersData.filter((user) => user.team === "CT");
     const ts = usersData.filter((user) => user.team === "TERRORIST");
 
@@ -167,7 +236,7 @@ const roundStart = (event) => {
       command += applyRandomBomb("smokegrenade", ts);
     }
 
-    rcon.runCommand(command);
+    return rcon.runCommand(command);
   });
 };
 
@@ -195,7 +264,7 @@ const roundEnd = (event) => {
   });
 };
 
-const gameOver = (event) => {
+const gameOver = (event, file) => {
   if (matchData === null) {
     return;
   }
@@ -213,7 +282,7 @@ const gameOver = (event) => {
   });
 
   if (helpers.isFinished(matchData)) {
-    firestore.sendMatch(matchData);
+    return firestore.sendMatch(matchData);
   }
 };
 
@@ -228,6 +297,7 @@ module.exports = {
   say: say,
   sayteam: say,
   playertriggered: playerTriggered,
+  teamtriggered: teamTriggered,
   roundstart: roundStart,
   roundend: roundEnd,
   gameover: gameOver,

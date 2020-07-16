@@ -15,7 +15,8 @@
   "dependencies": {
     "firebase-admin": "^8.12.1",
     "firebase-functions": "^3.6.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "rcon-client": "^4.2.0"
   },
   "devDependencies": {
     "eslint": "^5.12.0",

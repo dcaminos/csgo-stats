@@ -1,6 +1,21 @@
 const admin = require("firebase-admin");
 let db = admin.firestore();
 
+const getItems = (transaction, match) => {
+  const rankRef = db.collection("_config").doc("items");
+  return transaction.get(rankRef).then((doc) => {
+    if (!doc.exists) {
+      return {
+        ranks: [],
+        matches: [],
+      };
+    } else {
+      return doc.data();
+    }
+  });
+};
+exports.getItems = getItems;
+
 const getUsers = (transaction, match) => {
   const promises = match.users.map((user) => {
     var userRef = db.collection("_users").doc(user.id);

@@ -2,6 +2,21 @@ const admin = require("firebase-admin");
 const FieldValue = admin.firestore.FieldValue;
 let db = admin.firestore();
 
+const aggregateItems = (transaction, data, match) => {
+  const dbItems = Object.assign({}, data.items);
+  if (!dbItems.ranks.includes(match.rankId)) {
+    dbItems.ranks.push(match.rankId);
+  }
+
+  if (!dbItems.matches.includes(match.id)) {
+    dbItems.matches.push(match.id);
+  }
+
+  var configRef = db.collection("_config").doc("items");
+  return transaction.set(configRef, dbItems);
+};
+exports.aggregateItems = aggregateItems;
+
 const aggregateUsers = (transaction, data, match) => {
   const promises = match.users.map((user) => {
     const dbUser = data.users.find((dbUser) => dbUser.id === user.id);
@@ -199,11 +214,11 @@ const aggregateDamages = (transaction, data, match) => {
 };
 exports.aggregateDamages = aggregateDamages;
 
-const updateMatch = (transaction, ref, match) => {
+const createMatch = (transaction, data, match) => {
   const finalKills = [];
-  Object.keys(match.kills).map((sourceId) => {
+  Object.keys(match.kills).forEach((sourceId) => {
     const kill = match.kills[sourceId];
-    Object.keys(kill.targets).map((targetId) => {
+    Object.keys(kill.targets).forEach((targetId) => {
       finalKills.push({
         s: sourceId,
         t: targetId,
@@ -211,10 +226,17 @@ const updateMatch = (transaction, ref, match) => {
     });
   });
 
-  return transaction.update(ref, {
+  var matchRef = db.collection("_matches").doc(match.id);
+  return transaction.set(matchRef, {
+    id: match.id,
+    date: match.date,
+    chats: match.chats,
+    duration: match.duration,
+    map: match.map,
+    rankId: match.rankId,
+    score: match.score,
+    users: match.users,
     kills: finalKills,
-    deaths: FieldValue.delete(),
-    damages: FieldValue.delete(),
   });
 };
-exports.updateMatch = updateMatch;
+exports.createMatch = createMatch;

@@ -1,5 +1,4 @@
 import { checkServerStatus } from "actions/cloudFunctions";
-import { fetchRankingAction } from "actions/ranking";
 import PageSpinner from "components/PageSpinner";
 import React, { useEffect } from "react";
 import componentQueries from "react-component-queries";
@@ -17,7 +16,6 @@ const App = ({ breakpoint }) => {
 
   useEffect(() => {
     dispatch(checkServerStatus());
-    dispatch(fetchRankingAction());
   }, []);
 
   return (
