@@ -28,7 +28,7 @@ const initServer = () => {
   const promises = [];
 
   //Update server status
-  promises.puash(
+  promises.push(
     publicIp.v4().then((ip) => {
       let docRef = db.collection("_config").doc("status");
       docRef.set({
@@ -40,7 +40,7 @@ const initServer = () => {
   );
 
   //Update users status
-  promises.puash(
+  promises.push(
     db
       .collection("_users")
       .get()

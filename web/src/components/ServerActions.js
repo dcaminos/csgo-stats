@@ -1,9 +1,10 @@
 import { startServer } from "actions/cloudFunctions";
-import React from "react";
-import { FaSteam } from "react-icons/fa";
+import ServerConfig from "components/ServerConfig";
+import React, { useState } from "react";
+import { FaCogs, FaSteam } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
-import { Button, Spinner } from "reactstrap";
+import { Button, Popover, PopoverBody, Spinner } from "reactstrap";
 
 const ServerActions = ({ id }) => {
   const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const ServerActions = ({ id }) => {
   const config = useSelector(({ firestore: { data } }) => data._config);
   const isLoading = useSelector((state) => state.cloudFunctions.isLoading);
 
+  const [showPopover, setShowPopover] = useState(false);
   if (isLoaded(config) && isLoading === false) {
     const status = config.status;
 
@@ -28,7 +30,28 @@ const ServerActions = ({ id }) => {
     );
 
     if (status.state === "ON") {
-      return <ButtonPlay />;
+      return (
+        <div className="d-flex align-items-center">
+          <ButtonPlay />
+          <div className="ml-3">
+            <div id="Popover2">
+              <FaCogs color="#fc5c7d" size={40} />
+            </div>
+            <Popover
+              placement="bottom-end"
+              isOpen={showPopover}
+              toggle={() => setShowPopover(!showPopover)}
+              target="Popover2"
+              className="p-0 border-0"
+              style={{ minWidth: 250 }}
+            >
+              <PopoverBody className="p-0 border-light">
+                <ServerConfig setShowPopover={setShowPopover} />
+              </PopoverBody>
+            </Popover>
+          </div>
+        </div>
+      );
     } else if (status.state === "OFF") {
       return <ButtonStart />;
     }

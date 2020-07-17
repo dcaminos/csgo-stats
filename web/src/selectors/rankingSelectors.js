@@ -5,7 +5,7 @@ export const getRankList = ({ firestore: { data } }) => {
     return undefined;
   }
 
-  if (data._config.items === undefined) {
+  if (!data._config.items) {
     return undefined;
   }
 

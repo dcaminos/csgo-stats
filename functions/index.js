@@ -14,9 +14,11 @@ const checkServerStatus = require("./checkServerStatus");
 const startServer = require("./startServer");
 const stopServer = require("./stopServer");
 const setTeams = require("./setTeams");
+const setConfig = require("./setConfig");
 
 exports.addMatch = addMatch.main;
 exports.checkServerStatus = checkServerStatus.main;
 exports.startServer = startServer.main;
 exports.stopServer = stopServer.main;
 exports.setTeams = setTeams.main;
+exports.setConfig = setConfig.main;

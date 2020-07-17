@@ -38,13 +38,12 @@ firebase.initializeApp(firebaseConfig);
 // Initialize other services on firebase instance
 firebase.firestore(); // <- needed if using firestore
 
-/*
 if (process.env.NODE_ENV === "development") {
   firebase.firestore().settings({
     host: "localhost:8080",
     ssl: false,
   });
-}*/
+}
 
 // Add firebase to reducers
 const rootReducer = combineReducers({
