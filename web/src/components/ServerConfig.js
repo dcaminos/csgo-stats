@@ -1,5 +1,5 @@
 import { setConfig } from "actions/cloudFunctions";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import {
@@ -29,11 +29,25 @@ const ServerConfig = ({ setShowPopover }) => {
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
 
+  const filteredMaps = Object.keys(maps || [])
+    .filter(
+      (mapId) =>
+        (gameType === "demolition" && maps[mapId].type === "DE") ||
+        (gameType === "armrace" && maps[mapId].type === "AR")
+    )
+    .sort((a, b) => ("" + maps[a].name).localeCompare(maps[b].name));
+
+  useEffect(() => {
+    setMap(filteredMaps[0]);
+  }, [gameType]);
+
+  if (!maps) {
+    return null;
+  }
+
   const applyConfig = () => {
     setShowPopover(false);
-
-    const mapId = Object.keys(maps).find((mapId) => maps[mapId] === map);
-
+    const mapId = Object.keys(maps).find((mapId) => maps[mapId].name === map);
     dispatch(
       setConfig({
         gameType,
@@ -45,10 +59,6 @@ const ServerConfig = ({ setShowPopover }) => {
       })
     );
   };
-
-  if (!maps) {
-    return null;
-  }
 
   return (
     <div className="m-3">
@@ -105,8 +115,8 @@ const ServerConfig = ({ setShowPopover }) => {
             value={map}
             onChange={(e) => setMap(e.target.value)}
           >
-            {Object.keys(maps).map((mapId) => (
-              <option key={mapId}>{maps[mapId]}</option>
+            {filteredMaps.map((mapId) => (
+              <option key={mapId}>{maps[mapId].name}</option>
             ))}
           </Input>
         </Col>

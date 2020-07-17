@@ -49,7 +49,7 @@ const parseMatch = (match, maps) => {
   const date = moment(match.date);
   return {
     ...match,
-    map: maps === undefined ? match.map : maps[match.map],
+    map: maps === undefined ? match.map : maps[match.map].name,
     timestamp: date.format("X"),
     date: date.format("dddd, MMMM Do YYYY, h:mm a"),
     shortDate: date.format("l, LT"),

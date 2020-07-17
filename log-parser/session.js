@@ -30,6 +30,8 @@ const matchStart = (event) => {
     deaths: {},
     damages: {},
   };
+
+  return rcon.runCommand("mp_forcecamera 1;");
 };
 
 const enteredGame = (event) => {
@@ -189,9 +191,14 @@ const teamTriggered = (event) => {
   }
 };
 
-const playerTriggered = (event) => {
+const playerTriggered = (event, fromFile) => {
   if (matchData === null) {
     return;
+  }
+
+  if (event.data.action === "Got_The_Bomb") {
+    //Start round
+    distributeBombs(fromFile);
   }
 
   const source = helpers.findPlayer(matchData, event.data.source);
@@ -204,7 +211,7 @@ const playerTriggered = (event) => {
   }
 };
 
-const roundStart = (event, fromFile) => {
+const distributeBombs = (fromFile) => {
   if (fromFile === true) {
     return Promise.resolve();
   }
@@ -298,7 +305,6 @@ module.exports = {
   sayteam: say,
   playertriggered: playerTriggered,
   teamtriggered: teamTriggered,
-  roundstart: roundStart,
   roundend: roundEnd,
   gameover: gameOver,
 };

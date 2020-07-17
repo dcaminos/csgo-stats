@@ -17,7 +17,7 @@ export const getMatch = ({ firestore: { data } }, id) => {
 };
 
 const parseMatch = (match, users, maps) => ({
-  map: maps[match.map] === undefined ? match.map : maps[match.map],
+  map: maps[match.map] === undefined ? match.map : maps[match.map].name,
   duration: `${match.duration} min`,
   date: moment(match.date).format("dddd, MMMM Do YYYY, h:mm a"),
   chats: (match.chats || [])
