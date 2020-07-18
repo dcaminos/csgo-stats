@@ -33,6 +33,12 @@ const Balancer = ({ players }) => {
     return result;
   };
 
+  const switchPlayers = () => {
+    const teamC = [...teamA];
+    setTeamA(teamB);
+    setTeamB(teamC);
+  };
+
   const onDragEnd = (result) => {
     const { source, destination } = result;
     if (!destination) {
@@ -71,19 +77,6 @@ const Balancer = ({ players }) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Row>
-        <Col className={"d-flex justify-content-end"}>
-          {isLoaded(config) && config.status.state === "ON" && (
-            <Button onClick={() => setShowModal(true)}>{"Apply teams"}</Button>
-          )}
-          <ModalSetTeams
-            isOpen={showModal}
-            toggle={() => setShowModal(false)}
-            teamA={teamA}
-            teamB={teamB}
-          />
-        </Col>
-      </Row>
-      <Row>
         <Col md="6" sm="6" xs="12">
           <BalancerPlayers
             players={players}
@@ -97,7 +90,7 @@ const Balancer = ({ players }) => {
             <Col>
               <BalancerTeam
                 id="teamA"
-                title={"Team A"}
+                title={"Counter Terrorist"}
                 color="primary"
                 team={teamA}
               />
@@ -107,11 +100,29 @@ const Balancer = ({ players }) => {
             <Col>
               <BalancerTeam
                 id="teamB"
-                title="Team B"
+                title="Terrorist"
                 color="secondary"
                 team={teamB}
               />
             </Col>
+          </Row>
+          <Row>
+            {isLoaded(config) &&
+              config.status.state === "ON" &&
+              teamA.length + teamB.length > 0 && (
+                <Col className="d-flex justify-content-between">
+                  <Button onClick={switchPlayers}>{"Switch players"}</Button>
+                  <Button color="primary" onClick={() => setShowModal(true)}>
+                    {"Apply teams"}
+                  </Button>
+                </Col>
+              )}
+            <ModalSetTeams
+              isOpen={showModal}
+              toggle={() => setShowModal(false)}
+              teamA={teamA}
+              teamB={teamB}
+            />
           </Row>
         </Col>
       </Row>

@@ -7,16 +7,20 @@ const BalancerTeam = ({ id, color, title, team }) => {
     .reduce((accumulator, player) => accumulator + Number(player.rank), 0)
     .toFixed(3);
   return (
-    <Droppable droppableId={id}>
-      {(provided, snapshot) => (
-        <div ref={provided.innerRef}>
-          <Card>
-            <CardBody>
-              <CardTitle>
-                <p className="d-flex flex-row justify-content-center">
-                  <strong>{title}</strong>
-                </p>
-              </CardTitle>
+    <Card>
+      <CardBody>
+        <CardTitle>
+          <p className="d-flex flex-row justify-content-center">
+            <strong>{title}</strong>
+          </p>
+        </CardTitle>
+        <Droppable droppableId={id}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              className="d-flex"
+              style={{ flexFlow: "row wrap", minHeight: 50 }}
+            >
               {team.map((player, index) => (
                 <Draggable
                   key={player.id}
@@ -25,6 +29,7 @@ const BalancerTeam = ({ id, color, title, team }) => {
                 >
                   {(provided, snapshot) => (
                     <div
+                      className="m-1"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -37,18 +42,18 @@ const BalancerTeam = ({ id, color, title, team }) => {
                 </Draggable>
               ))}
 
-              <CardFooter className="d-flex flex-row justify-content-end">
-                <p>
-                  Players: <strong>{team.length}</strong>
-                  &nbsp;&nbsp;&nbsp;Points: <strong>{totalPoints}</strong>
-                </p>
-              </CardFooter>
-            </CardBody>
-          </Card>
-          {provided.placeholder}
-        </div>
-      )}
-    </Droppable>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+        <CardFooter className="d-flex flex-row justify-content-end">
+          <p>
+            Players: <strong>{team.length}</strong>
+            &nbsp;&nbsp;&nbsp;Points: <strong>{totalPoints}</strong>
+          </p>
+        </CardFooter>
+      </CardBody>
+    </Card>
   );
 };
 
