@@ -97,19 +97,3 @@ const generateCommands = (config) => {
 
   return command;
 };
-/*"mp_autoteambalance 0;" +
-  body.teamA.map((player) => `sm_team "${player.name}" 3;`).join("") +
-  body.teamB.map((player) => `sm_team "${player.name}" 2;`).join("") +
-  "mp_restartgame 5;";
-*/
-
-/*
-{
->    gameType: 'armrace',
->    map: 'cs_assault',
->    bombGranade: true,
->    bombFlashbang: false,
->    bombMolotov: false,
->    bombSmoke: true
->  }
-*/

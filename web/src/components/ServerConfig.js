@@ -19,7 +19,7 @@ const ServerConfig = ({ setShowPopover }) => {
   const dispatch = useDispatch();
   const maps = useSelector(({ firestore: { data } }) => data._config.maps);
 
-  const [gameType, setGameType] = useState("demolition");
+  const [gameType, setGameType] = useState("casual");
   const [map, setMap] = useState("Bank");
   const [bombGranade, setBombGranade] = useState(true);
   const [bombFlashbang, setBombFlashbang] = useState(true);
@@ -32,13 +32,15 @@ const ServerConfig = ({ setShowPopover }) => {
   const filteredMaps = Object.keys(maps || [])
     .filter(
       (mapId) =>
-        (gameType === "demolition" && maps[mapId].type === "DE") ||
-        (gameType === "armrace" && maps[mapId].type === "AR")
+        maps[mapId].type === gameType ||
+        (gameType === "casual" && maps[mapId].type === "demolition")
     )
     .sort((a, b) => ("" + maps[a].name).localeCompare(maps[b].name));
 
   useEffect(() => {
-    setMap(filteredMaps[0]);
+    if (filteredMaps.length > 0) {
+      setMap(maps[filteredMaps[0]].name);
+    }
   }, [gameType]);
 
   if (!maps) {
@@ -81,6 +83,17 @@ const ServerConfig = ({ setShowPopover }) => {
         <FormGroup tag="fieldset" row>
           <Label className="font-weight-bold">Game type</Label>
           <Col className="ml-4 d-flex flex-column">
+            <Label>
+              <Input
+                type="radio"
+                name="radio0"
+                checked={gameType === "casual"}
+                onChange={(e) => {
+                  if (e.target.value === "on") setGameType("casual");
+                }}
+              />{" "}
+              Casual
+            </Label>
             <Label>
               <Input
                 type="radio"

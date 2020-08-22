@@ -1,5 +1,59 @@
-import randomColor from "randomcolor";
-import { createSelector } from "reselect";
+export const getRanks = ({ firestore: { data } }) => {
+  if (data._ranks === undefined) {
+    return undefined;
+  }
+
+  if (!data._ranks) {
+    return undefined;
+  }
+
+  return getChartData(data._ranks);
+
+  return Object.keys(data._ranks).map((rankId) => ({
+    id: rankId,
+    users: data._ranks[rankId].users.map(parseRanking),
+  }));
+};
+
+const getChartData = (ranks) => {
+  const datasets = Object.keys(data._ranks).map((rankId) => ({
+    ...generateLineStyle(player.id),
+    id: rankId,
+    users: data._ranks[rankId].users.map(parseRanking),
+  }));
+
+  const datasets2 = data.map((player) => ({
+    ...generateLineStyle(player.id),
+    label: player.name,
+    hidden: true,
+    data: timestamps.map(
+      (t) =>
+        (player.data.find((x) => x.timestamp._seconds === t) || {
+          [selectedId]: null,
+        })[selectedId]
+    ),
+  }));
+
+  const result = {
+    labels: timestamps.map((t) =>
+      new Date(t * 1000).toLocaleDateString("es-AR")
+    ),
+    datasets: datasets,
+  };
+
+  return result;
+};
+
+/*
+
+const parseRanking = (player) => {
+  const rank = Number(player.score / player.rounds);
+  return {
+    ...player,
+    rank: rank,
+    rankText: `${rank.toFixed(3).replace(".", ",")}`,
+  };
+};
 
 const getRandomRgb = () => {
   var num = Math.round(0xffffff * Math.random());
@@ -94,3 +148,4 @@ export const indicatorOptionsSelector = createSelector(
   (state) => state.progress.indicators.options,
   (options) => options
 );
+*/
