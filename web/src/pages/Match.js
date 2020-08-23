@@ -5,11 +5,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
 import { Col, Row } from "reactstrap";
-import { getMatchInfo } from "selectors/rankingSelectors";
+import { getMatch } from "selectors/matchSelectors";
 
 const MatchPage = ({ id }) => {
-  useFirestoreConnect(() => [{ collection: "match_info", doc: id }]);
-  const match = useSelector((state) => getMatchInfo(state, id));
+  useFirestoreConnect(() => [{ collection: "_matches", doc: id }]);
+  const match = useSelector((state) => getMatch(state, id));
 
   if (!isLoaded(match)) return <PageSpinner />;
 
@@ -23,12 +23,12 @@ const MatchPage = ({ id }) => {
 
       <Row>
         <Col md="12" sm="12" xs="12">
-          <TeamResults team={match.team1} result={match.resultTeam1} />
+          <TeamResults team={match.teamA} />
         </Col>
       </Row>
       <Row>
         <Col md="12" sm="12" xs="12">
-          <TeamResults team={match.team2} result={match.resultTeam2} />
+          <TeamResults team={match.teamB} />
         </Col>
       </Row>
     </Page>

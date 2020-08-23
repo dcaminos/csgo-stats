@@ -23,7 +23,7 @@ const BalancerPlayers = ({ players, actives, setActives }) => {
           <tbody>
             {players.map((player, index) => (
               <tr key={index}>
-                <td className="align-middle text-left">{`${player.name} (${player.rank})`}</td>
+                <td className="align-middle text-left">{player.name}</td>
 
                 <td className="align-middle text-center">
                   <Switch

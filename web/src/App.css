@@ -47,8 +47,8 @@ th .ascending::after {
 
 th .descending::after {
   content: "\25bc";
-    margin-left: -1em;
-    position: relative;
-    float: right;
-    left: 15px;
+  margin-left: -1em;
+  position: relative;
+  float: right;
+  left: 15px;
 }

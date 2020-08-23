@@ -1,4 +1,4 @@
-import { fetchRankingAction } from "actions/ranking";
+import { checkServerStatus } from "actions/cloudFunctions";
 import PageSpinner from "components/PageSpinner";
 import React, { useEffect } from "react";
 import componentQueries from "react-component-queries";
@@ -8,15 +8,14 @@ import "./App.css";
 import MainLayout from "./components/Layout/MainLayout";
 import BalancerPage from "./pages/Balancer";
 import MatchPage from "./pages/Match";
-import MatchesPage from "./pages/Matches";
 import RankingPage from "./pages/Ranking";
-import ProgressPage from "./pages/Progress";
 import "./styles/reduction.scss";
 
 const App = ({ breakpoint }) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(fetchRankingAction());
+    dispatch(checkServerStatus());
   }, []);
 
   return (
@@ -25,14 +24,12 @@ const App = ({ breakpoint }) => {
         <MainLayout breakpoint={breakpoint}>
           <React.Suspense fallback={<PageSpinner />}>
             <Route exact path="/" component={RankingPage} />
-            <Route exact path="/matches" component={MatchesPage} />
             <Route
               exact
               path="/matches/:id"
               render={(props) => <MatchPage id={props.match.params.id} />}
             />
             <Route exact path="/balancer" component={BalancerPage} />
-            <Route exact path="/stats" component={ProgressPage} />
           </React.Suspense>
         </MainLayout>
         <Redirect to="/" />

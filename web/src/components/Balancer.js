@@ -1,17 +1,25 @@
 import BalancerPlayers from "components/BalancerPlayers";
 import BalancerTeam from "components/BalancerTeam";
+import ModalSetTeams from "components/ModalSetTeams";
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import { Col, Row } from "reactstrap";
+import { useSelector } from "react-redux";
+import { isLoaded, useFirestoreConnect } from "react-redux-firebase";
+import { Button, Col, Row } from "reactstrap";
+
 const Balancer = ({ players }) => {
   const initActives = {};
   players.forEach((player) => {
-    initActives[player.id] = false;
+    initActives[player.id] = player.online;
   });
+
+  useFirestoreConnect(() => [{ collection: "_config", doc: "status" }]);
+  const config = useSelector(({ firestore: { data } }) => data._config);
 
   const [actives, setActives] = useState(initActives);
   const [teamA, setTeamA] = useState([]);
   const [teamB, setTeamB] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setTeams(players, actives, setTeamA, setTeamB);
@@ -23,6 +31,12 @@ const Balancer = ({ players }) => {
     result.splice(endIndex, 0, removed);
 
     return result;
+  };
+
+  const switchPlayers = () => {
+    const teamC = [...teamA];
+    setTeamA(teamB);
+    setTeamB(teamC);
   };
 
   const onDragEnd = (result) => {
@@ -76,7 +90,7 @@ const Balancer = ({ players }) => {
             <Col>
               <BalancerTeam
                 id="teamA"
-                title={"Team A"}
+                title={"Counter Terrorist"}
                 color="primary"
                 team={teamA}
               />
@@ -86,11 +100,29 @@ const Balancer = ({ players }) => {
             <Col>
               <BalancerTeam
                 id="teamB"
-                title="Team B"
+                title="Terrorist"
                 color="secondary"
                 team={teamB}
               />
             </Col>
+          </Row>
+          <Row>
+            {isLoaded(config) &&
+              config.status.state === "ON" &&
+              teamA.length + teamB.length > 0 && (
+                <Col className="d-flex justify-content-between">
+                  <Button onClick={switchPlayers}>{"Switch players"}</Button>
+                  <Button color="primary" onClick={() => setShowModal(true)}>
+                    {"Apply teams"}
+                  </Button>
+                </Col>
+              )}
+            <ModalSetTeams
+              isOpen={showModal}
+              toggle={() => setShowModal(false)}
+              teamA={teamA}
+              teamB={teamB}
+            />
           </Row>
         </Col>
       </Row>
