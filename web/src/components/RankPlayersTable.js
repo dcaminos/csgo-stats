@@ -38,7 +38,7 @@ const RankPlayersTable = ({ data, ColumnTitle }) => {
           <ColumnTitle id="kills" text="Kills" />
           <ColumnTitle id="deaths" text="Deaths" />
           <ColumnTitle id="assists" text="Assists" />
-          <ColumnTitle id="headshotKills" text="Headshots" />
+          <ColumnTitle id="headshots" text="Headshots" />
         </tr>
       </thead>
       <tbody>

@@ -23,7 +23,7 @@ const Balancer = ({ players }) => {
 
   useEffect(() => {
     setTeams(players, actives, setTeamA, setTeamB);
-  }, [actives]);
+  }, [actives, players]);
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);

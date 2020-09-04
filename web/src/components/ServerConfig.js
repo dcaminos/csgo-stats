@@ -41,7 +41,7 @@ const ServerConfig = ({ setShowPopover }) => {
     if (filteredMaps.length > 0) {
       setMap(maps[filteredMaps[0]].name);
     }
-  }, [gameType]);
+  }, [gameType, filteredMaps, maps]);
 
   if (!maps) {
     return null;
