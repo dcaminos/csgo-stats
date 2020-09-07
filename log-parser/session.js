@@ -226,7 +226,7 @@ const distributeBombs = (fromFile) => {
   usersData.forEach((user) => (user.alive = true));
   
   isRoundFinished=false;
-  
+
   return firestore.getCurrentConfig().then((config) => {
     if (config === undefined) {
       return;
@@ -254,7 +254,7 @@ const distributeBombs = (fromFile) => {
     }
 
     if (config.useFriendlyFire) {
-      command += "mp_friendlyfire 1;"
+      command += "mp_teammates_are_enemies 1;"
     }
 
     return rcon.runCommand(command);

@@ -66,7 +66,7 @@ const ServerConfig = ({ setShowPopover }) => {
 
   return (
     <div className="m-3">
-      <Modal isOpen={showModal} toggle={toggleModal} backdrop={"static"}>
+      <Modal zIndex="9999" isOpen={showModal} toggle={toggleModal} backdrop={"static"}>
         <ModalHeader toggle={toggleModal}>Warning</ModalHeader>
         <ModalBody>
           This action will change the current map and restart the match. Be sure
