@@ -25,6 +25,7 @@ const ServerConfig = ({ setShowPopover }) => {
   const [bombFlashbang, setBombFlashbang] = useState(true);
   const [bombMolotov, setBombMolotov] = useState(true);
   const [bombSmoke, setBombSmoke] = useState(true);
+  const [friendlyFire, setFriendlyFire] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
@@ -58,6 +59,7 @@ const ServerConfig = ({ setShowPopover }) => {
         bombFlashbang,
         bombMolotov,
         bombSmoke,
+        friendlyFire,
       })
     );
   };
@@ -168,6 +170,19 @@ const ServerConfig = ({ setShowPopover }) => {
               onChange={(e) => setBombSmoke(!bombSmoke)}
             />{" "}
             Smoke
+          </Label>
+        </Col>
+      </FormGroup>
+      <FormGroup>
+        <Label className="font-weight-bold">Friendly Fire</Label>
+        <Col className="ml-4 d-flex flex-column">
+          <Label>
+            <Input
+              type="checkbox"
+              checked={friendlyFire}
+              onChange={(e) => setFriendlyFire(!friendlyFire)}
+            />{" "}
+            Friendly fire
           </Label>
         </Col>
       </FormGroup>

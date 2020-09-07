@@ -67,7 +67,6 @@ const getMergedData = (previousRank, lastRank, users) => {
   }, {});
 
   Object.keys(mapResult).forEach(i => {
-    console.log(i);
     mapResult[i].online = users[i].online;
   });
 
