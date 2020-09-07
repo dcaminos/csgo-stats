@@ -16,7 +16,7 @@ const App = ({ breakpoint }) => {
 
   useEffect(() => {
     dispatch(checkServerStatus());
-  }, []);
+  }, [dispatch]);
 
   return (
     <BrowserRouter>

@@ -21,6 +21,7 @@ exports.main = functions.https.onRequest((request, response) => {
               useRandomGranade: config.bombGranade,
               useRandomMolotov: config.bombMolotov,
               useRandomSmoke: config.bombSmoke,
+              useFriendlyFire: config.friendlyFire,
             },
             { merge: true }
           ),

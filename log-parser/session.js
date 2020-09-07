@@ -14,6 +14,7 @@ let matchData = null;
 let usersData = [];
 let bombPlanter = null;
 let bombDefuser = null;
+let isRoundFinished = true;
 
 const matchStart = (event) => {
   const map = event.data.map;
@@ -32,10 +33,10 @@ const matchStart = (event) => {
   };
 
   if (map.substr(0, 2) === "ar") {
-    return rcon.runCommand("mp_forcecamera 1;");
+    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;");
   } else {
     return rcon.runCommand(
-      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;"
+      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 8;"
     );
   }
 };
@@ -204,7 +205,8 @@ const playerTriggered = (event, fromFile) => {
 
   if (event.data.action === "Got_The_Bomb") {
     //Start round
-    distributeBombs(fromFile);
+    if (isRoundFinished)
+      distributeBombs(fromFile);
   }
 
   const source = helpers.findPlayer(matchData, event.data.source);
@@ -222,12 +224,14 @@ const distributeBombs = (fromFile) => {
     return Promise.resolve();
   }
   usersData.forEach((user) => (user.alive = true));
-
+  
+  isRoundFinished=false;
+  
   return firestore.getCurrentConfig().then((config) => {
     if (config === undefined) {
       return;
     }
-
+    
     const cts = usersData.filter((user) => user.team === "CT");
     const ts = usersData.filter((user) => user.team === "TERRORIST");
 
@@ -249,6 +253,10 @@ const distributeBombs = (fromFile) => {
       command += applyRandomBomb("smokegrenade", ts);
     }
 
+    if (config.useFriendlyFire) {
+      command += "mp_friendlyfire 1;"
+    }
+
     return rcon.runCommand(command);
   });
 };
@@ -266,6 +274,8 @@ const roundEnd = (event) => {
   if (matchData === null) {
     return;
   }
+
+  isRoundFinished = true;
 
   usersData.forEach((user) => {
     if (user.team === "TERRORIST" || user.team === "CT") {
