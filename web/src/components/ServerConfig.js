@@ -48,7 +48,7 @@ const ServerConfig = ({ setShowPopover }) => {
         setChangedGameType(false);
       }
     }
-  }, [gameType, filteredMaps, maps, changedGameType]);
+  }, [filteredMaps, maps, changedGameType]);
 
   if (!maps) {
     return null;
