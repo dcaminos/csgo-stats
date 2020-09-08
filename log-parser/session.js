@@ -33,10 +33,10 @@ const matchStart = (event) => {
   };
 
   if (map.substr(0, 2) === "ar") {
-    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;");
+    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;mp_warmuptime 90;");
   } else {
     return rcon.runCommand(
-      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 8;"
+      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 10;mp_warmuptime 90;"
     );
   }
 };

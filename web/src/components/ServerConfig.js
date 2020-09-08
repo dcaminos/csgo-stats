@@ -19,13 +19,14 @@ const ServerConfig = ({ setShowPopover }) => {
   const dispatch = useDispatch();
   const maps = useSelector(({ firestore: { data } }) => data._config.maps);
 
-  const [gameType, setGameType] = useState("casual");
+  const [gameType, setGameType] = useState("competitive");
+  const [changedGameType, setChangedGameType] = useState(true);
   const [map, setMap] = useState("Bank");
   const [bombGranade, setBombGranade] = useState(true);
   const [bombFlashbang, setBombFlashbang] = useState(true);
   const [bombMolotov, setBombMolotov] = useState(true);
   const [bombSmoke, setBombSmoke] = useState(true);
-  const [friendlyFire, setFriendlyFire] = useState(false);
+  const [friendlyFire, setFriendlyFire] = useState(true);
 
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => setShowModal(!showModal);
@@ -34,15 +35,20 @@ const ServerConfig = ({ setShowPopover }) => {
     .filter(
       (mapId) =>
         maps[mapId].type === gameType ||
-        (gameType === "casual" && maps[mapId].type === "demolition")
+        (gameType === "casual" && maps[mapId].type === "demolition") ||
+        (gameType === "competitive" &&
+          (maps[mapId].type === "casual" || maps[mapId].type === "demolition"))
     )
     .sort((a, b) => ("" + maps[a].name).localeCompare(maps[b].name));
 
   useEffect(() => {
-    if (filteredMaps.length > 0) {
-      setMap(maps[filteredMaps[0]].name);
+    if (changedGameType) {
+      if (filteredMaps.length > 0) {
+        setMap(maps[filteredMaps[0]].name);
+        setChangedGameType(false);
+      }
     }
-  }, [gameType, filteredMaps, maps]);
+  }, [gameType, filteredMaps, maps, changedGameType]);
 
   if (!maps) {
     return null;
@@ -66,7 +72,12 @@ const ServerConfig = ({ setShowPopover }) => {
 
   return (
     <div className="m-3">
-      <Modal zIndex="9999" isOpen={showModal} toggle={toggleModal} backdrop={"static"}>
+      <Modal
+        zIndex="9999"
+        isOpen={showModal}
+        toggle={toggleModal}
+        backdrop={"static"}
+      >
         <ModalHeader toggle={toggleModal}>Warning</ModalHeader>
         <ModalBody>
           This action will change the current map and restart the match. Be sure
@@ -89,9 +100,28 @@ const ServerConfig = ({ setShowPopover }) => {
               <Input
                 type="radio"
                 name="radio0"
+                checked={gameType === "competitive"}
+                onChange={(e) => {
+                  if (e.target.value === "on") {
+                    setGameType("competitive");
+                    setChangedGameType(true);
+                    setFriendlyFire(true);
+                  }
+                }}
+              />{" "}
+              Competitive
+            </Label>
+            <Label>
+              <Input
+                type="radio"
+                name="radio1"
                 checked={gameType === "casual"}
                 onChange={(e) => {
-                  if (e.target.value === "on") setGameType("casual");
+                  if (e.target.value === "on") {
+                    setGameType("casual");
+                    setChangedGameType(true);
+                    setFriendlyFire(false);
+                  }
                 }}
               />{" "}
               Casual
@@ -99,10 +129,14 @@ const ServerConfig = ({ setShowPopover }) => {
             <Label>
               <Input
                 type="radio"
-                name="radio1"
+                name="radio2"
                 checked={gameType === "demolition"}
                 onChange={(e) => {
-                  if (e.target.value === "on") setGameType("demolition");
+                  if (e.target.value === "on") {
+                    setGameType("demolition");
+                    setChangedGameType(true);
+                    setFriendlyFire(false);
+                  }
                 }}
               />{" "}
               Demolition
@@ -110,10 +144,14 @@ const ServerConfig = ({ setShowPopover }) => {
             <Label>
               <Input
                 type="radio"
-                name="radio2"
+                name="radio3"
                 checked={gameType === "armrace"}
                 onChange={(e) => {
-                  if (e.target.value === "on") setGameType("armrace");
+                  if (e.target.value === "on") {
+                    setGameType("armrace");
+                    setChangedGameType(true);
+                    setFriendlyFire(false);
+                  }
                 }}
               />{" "}
               Armrace
