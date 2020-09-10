@@ -52,3 +52,12 @@ th .descending::after {
   float: right;
   left: 15px;
 }
+
+.btn-sm {
+  height: fit-content;
+}
+
+.botLabel {
+  padding-top: 1px !important;
+  padding-left: 1px !important;
+}
