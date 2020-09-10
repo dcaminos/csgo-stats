@@ -119,4 +119,4 @@ const getBots = (qty, botType, botLevel) => {
     command += `bot_add ${botType} ${botLevel};`;
   }
   return command;
-}
+};

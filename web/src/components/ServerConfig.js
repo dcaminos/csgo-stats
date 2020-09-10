@@ -110,7 +110,7 @@ const ServerConfig = ({ setShowPopover }) => {
         </ModalFooter>
       </Modal>
       <Col>
-        <FormGroup className="" tag="fieldset" row>
+        <FormGroup tag="fieldset" row>
           <Label className="font-weight-bold">Game type</Label>
           <Col className="ml-4 d-flex flex-column">
             <Label>
@@ -176,7 +176,7 @@ const ServerConfig = ({ setShowPopover }) => {
           </Col>
         </FormGroup>
       </Col>
-      <FormGroup className="">
+      <FormGroup >
         <Label className="font-weight-bold">Map</Label>
         <Col className="d-flex flex-column">
           <Input
@@ -191,7 +191,7 @@ const ServerConfig = ({ setShowPopover }) => {
           </Input>
         </Col>
       </FormGroup>
-      <FormGroup className="">
+      <FormGroup >
         <Label className="font-weight-bold">Random bombs</Label>
         <Col className="ml-4 d-flex flex-column">
           <Label>
@@ -228,7 +228,7 @@ const ServerConfig = ({ setShowPopover }) => {
           </Label>
         </Col>
       </FormGroup>
-      <FormGroup className="">
+      <FormGroup >
         <Label className="font-weight-bold">Friendly Fire</Label>
         <Col className="ml-4 d-flex flex-column">
           <Label>
