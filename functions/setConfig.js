@@ -102,11 +102,11 @@ const generateCommands = (config) => {
   }
   
   if (config.addBotCt) {
-    commando += getBots(config.addBotCt, "ct", config.botLevel);
+    command += getBots(config.addBotCt, "ct", config.botLevel);
   }
   
   if (config.addBotT) {
-    commando += getBots(config.addBotT, "t", config.botLevel);
+    command += getBots(config.addBotT, "t", config.botLevel);
   }
   
   command += `changelevel ${config.map};`;
