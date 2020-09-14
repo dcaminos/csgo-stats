@@ -33,10 +33,10 @@ const matchStart = (event) => {
   };
 
   if (map.substr(0, 2) === "ar") {
-    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;mp_warmuptime 90;");
+    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;mp_warmuptime 10;mp_autokick 0;bot_kick;");
   } else {
     return rcon.runCommand(
-      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 10;mp_warmuptime 90;"
+      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 5;mp_warmuptime 10;mp_autokick 0;bot_kick;"
     );
   }
 };
@@ -213,6 +213,7 @@ const playerTriggered = (event, fromFile) => {
   if (event.data.action === "Planted_The_Bomb") {
     bombPlanter = event.data.source;
     source.score += SCORE_BOMB_PLANTED;
+    isRoundFinished=true;
   } else if (event.data.action === "Defused_The_Bomb") {
     bombDefuser = event.data.source;
     source.score += SCORE_BOMB_DEFUSED;
@@ -254,7 +255,7 @@ const distributeBombs = (fromFile) => {
     }
 
     if (config.useFriendlyFire) {
-      command += "mp_teammates_are_enemies 1;"
+      command += "mp_teammates_are_enemies 1;mp_autokick 0;"
     }
 
     return rcon.runCommand(command);
@@ -271,11 +272,11 @@ const applyRandomBomb = (bomb, team) => {
 };
 
 const roundEnd = (event) => {
+  isRoundFinished = true;
+  
   if (matchData === null) {
     return;
   }
-
-  isRoundFinished = true;
 
   usersData.forEach((user) => {
     if (user.team === "TERRORIST" || user.team === "CT") {

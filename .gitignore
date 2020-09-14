@@ -64,3 +64,5 @@ node_modules/
 
 #google service_account public key
 csgo-stats-457a9-4aacb43cb750.json
+log-parser/.DS_Store
+.DS_Store

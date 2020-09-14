@@ -22,6 +22,9 @@ exports.main = functions.https.onRequest((request, response) => {
               useRandomMolotov: config.bombMolotov,
               useRandomSmoke: config.bombSmoke,
               useFriendlyFire: config.friendlyFire,
+              addBotCt: config.addBotCt,
+              addBotT: config.addBotT,
+              botLevel: config.botLevel,
             },
             { merge: true }
           ),
@@ -94,7 +97,26 @@ const generateCommands = (config) => {
       break;
   }
 
+  if (config.useFriendlyFire) {
+    command += "mp_teammates_are_enemies 1;mp_autokick 0;"
+  }
+  
+  if (config.addBotCt) {
+    commando += getBots(config.addBotCt, "ct", config.botLevel);
+  }
+  
+  if (config.addBotT) {
+    commando += getBots(config.addBotT, "t", config.botLevel);
+  }
+  
   command += `changelevel ${config.map};`;
+  return command;
+};
 
+const getBots = (qty, botType, botLevel) => {
+  let command = "";
+  for (let index = 0; index < qty; index++) {
+    command += `bot_add ${botType} ${botLevel};`;
+  }
   return command;
 };
