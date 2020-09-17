@@ -70,7 +70,7 @@ const generateCommands = (config) => {
       command += "game_type 0;game_mode 0;";
       break;
     case "competitive":
-      command += "game_type 0;game_mode 1;";
+      command += "game_type 0;game_mode 1;mp_autokick 0;";
       break;
     case "wingman":
       command += "game_type 0;game_mode 2;";
@@ -96,20 +96,24 @@ const generateCommands = (config) => {
     default:
       break;
   }
-
-  if (config.useFriendlyFire) {
+    
+  if (config.useFriendlyFire && config.gameType != "competitive") {
     command += "mp_teammates_are_enemies 1;mp_autokick 0;"
   }
   
+  command += `changelevel ${config.map};`;
+    
+  if (config.addBotCt === 0 && config.addBotT === 0)
+    command += "bot_kick;";
+  }
   if (config.addBotCt) {
-    commando += getBots(config.addBotCt, "ct", config.botLevel);
+    command += getBots(config.addBotCt, "ct", config.botLevel);
   }
   
   if (config.addBotT) {
-    commando += getBots(config.addBotT, "t", config.botLevel);
+    command += getBots(config.addBotT, "t", config.botLevel);
   }
   
-  command += `changelevel ${config.map};`;
   return command;
 };
 

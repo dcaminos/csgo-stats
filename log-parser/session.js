@@ -33,10 +33,10 @@ const matchStart = (event) => {
   };
 
   if (map.substr(0, 2) === "ar") {
-    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;mp_warmuptime 10;mp_autokick 0;bot_kick;");
+    return rcon.runCommand("mp_forcecamera 1;mp_roundtime 10.00;mp_warmuptime 10;mp_autokick 0;");
   } else {
     return rcon.runCommand(
-      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 5;mp_warmuptime 10;mp_autokick 0;bot_kick;"
+      "mp_forcecamera 1;mp_maxrounds 21;mp_halftime 1;mp_roundtime 1.99;mp_freezetime 5;mp_warmuptime 10;mp_autokick 0;"
     );
   }
 };
@@ -252,10 +252,6 @@ const distributeBombs = (fromFile) => {
     if (config.useRandomSmoke) {
       command += applyRandomBomb("smokegrenade", cts);
       command += applyRandomBomb("smokegrenade", ts);
-    }
-
-    if (config.useFriendlyFire) {
-      command += "mp_teammates_are_enemies 1;mp_autokick 0;"
     }
 
     return rcon.runCommand(command);
