@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import {
-  ButtonGroup,
   Button,
   Col,
   FormGroup,
@@ -27,14 +26,7 @@ const ServerConfig = ({ setShowPopover }) => {
   const [bombFlashbang, setBombFlashbang] = useState(true);
   const [bombMolotov, setBombMolotov] = useState(true);
   const [bombSmoke, setBombSmoke] = useState(true);
-  const [friendlyFire, setFriendlyFire] = useState(true);
-  const [botLevel, setBotLevel] = useState("expert");
-  const [botLevelDisabled, setBotLevelDisabled] = useState(true);
-  const [botsCT, setBotsCT] = useState(0);
-  const [botsT, setBotsT] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const minBot = 0;
-  const maxBot = 5;
   const toggleModal = () => setShowModal(!showModal);
 
   const filteredMaps = Object.keys(maps || [])
@@ -56,14 +48,6 @@ const ServerConfig = ({ setShowPopover }) => {
     }
   }, [filteredMaps, maps, changedGameType]);
 
-  useEffect(() => {
-    if (botsCT === minBot && botsT === minBot) {
-      setBotLevelDisabled(true);
-    } else {
-      setBotLevelDisabled(false);
-    }
-  }, [botsCT, botsT]);
-
   if (!maps) {
     return null;
   }
@@ -79,10 +63,6 @@ const ServerConfig = ({ setShowPopover }) => {
         bombFlashbang,
         bombMolotov,
         bombSmoke,
-        friendlyFire,
-        addBotCt: botsCT,
-        addBotT: botsT,
-        botLevel,
       })
     );
   };
@@ -122,7 +102,6 @@ const ServerConfig = ({ setShowPopover }) => {
                   if (e.target.value === "on") {
                     setGameType("competitive");
                     setChangedGameType(true);
-                    setFriendlyFire(true);
                   }
                 }}
               />{" "}
@@ -137,7 +116,6 @@ const ServerConfig = ({ setShowPopover }) => {
                   if (e.target.value === "on") {
                     setGameType("casual");
                     setChangedGameType(true);
-                    setFriendlyFire(false);
                   }
                 }}
               />{" "}
@@ -152,7 +130,6 @@ const ServerConfig = ({ setShowPopover }) => {
                   if (e.target.value === "on") {
                     setGameType("demolition");
                     setChangedGameType(true);
-                    setFriendlyFire(false);
                   }
                 }}
               />{" "}
@@ -167,7 +144,6 @@ const ServerConfig = ({ setShowPopover }) => {
                   if (e.target.value === "on") {
                     setGameType("armrace");
                     setChangedGameType(true);
-                    setFriendlyFire(false);
                   }
                 }}
               />{" "}
@@ -228,86 +204,6 @@ const ServerConfig = ({ setShowPopover }) => {
           </Label>
         </Col>
       </FormGroup>
-      <FormGroup >
-        <Label className="font-weight-bold">Friendly Fire</Label>
-        <Col className="ml-4 d-flex flex-column">
-          <Label>
-            <Input
-              type="checkbox"
-              checked={friendlyFire}
-              onChange={(e) => setFriendlyFire(!friendlyFire)}
-            />{" "}
-            Friendly fire
-          </Label>
-        </Col>
-        <Label className="font-weight-bold">Need Bots ?</Label>
-        <Col className="d-flex flex-column">
-        <span className="input-group">
-            <div className="border-0 form-control col-3 col-sm-3 botLabel">CT</div>
-            <Button
-              disabled={botsCT > minBot ? false : true}
-              onClick={() => setBotsCT(botsCT - 1)}
-              size="sm"
-              className="col-3 col-sm-3"
-            >
-              -
-            </Button>
-            <Label size="sm" className="col-3 col-sm-3">{botsCT}</Label>
-            <Button
-              disabled={botsCT < maxBot ? false : true}
-              onClick={() => setBotsCT(botsCT + 1)}
-              size="sm"
-              className="col-3 col-sm-3"
-            >
-              +
-            </Button>
-          </span>
-          <span className="input-group">
-          <div className="border-0 form-control col-3 col-sm-3 botLabel">T</div>
-            <Button
-              disabled={botsT > minBot ? false : true}
-              onClick={() => setBotsT(botsT - 1)}
-              size="sm"
-              className="col-3 col-sm-3"
-            >
-              -
-            </Button>
-            <Label size="sm" className="col-3 col-sm-3">{botsT}</Label>
-            <Button
-              disabled={botsT < maxBot ? false : true}
-              onClick={() => setBotsT(botsT + 1)}
-              size="sm"
-              className="col-3 col-sm-3"
-            >
-              +
-            </Button>
-          </span>
-          <ButtonGroup size="sm" className="mb-2">
-            <Button
-              disabled={botLevelDisabled}
-              active={!botLevelDisabled && botLevel === "normal" ? true : false}
-              onClick={() => setBotLevel("normal")}
-            >
-              Normal
-            </Button>
-            <Button
-              disabled={botLevelDisabled}
-              active={!botLevelDisabled && botLevel === "hard" ? true : false}
-              onClick={() => setBotLevel("hard")}
-            >
-              Hard
-            </Button>
-            <Button
-              disabled={botLevelDisabled}
-              active={!botLevelDisabled && botLevel === "expert" ? true : false}
-              onClick={() => setBotLevel("expert")}
-            >
-              Expert
-            </Button>
-          </ButtonGroup>
-        </Col>
-      </FormGroup>
-
       <Button className="w-100" onClick={() => setShowModal(true)}>
         Apply config
       </Button>

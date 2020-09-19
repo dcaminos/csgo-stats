@@ -17,10 +17,10 @@ exports.main = functions.https.onRequest((request, response) => {
           doc,
           db.collection("_config").doc("config").set(
             {
-              useRandomFlashbang: config.bombFlashbang,
-              useRandomGranade: config.bombGranade,
-              useRandomMolotov: config.bombMolotov,
-              useRandomSmoke: config.bombSmoke,
+              useTeammatesAreEnemies: config.teammatesAreEnemies,
+              addBotCt: config.addBotCt,
+              addBotT: config.addBotT,
+              botLevel: config.botLevel,
             },
             { merge: true }
           ),
@@ -61,39 +61,28 @@ exports.main = functions.https.onRequest((request, response) => {
 
 const generateCommands = (config) => {
   let command = "";
-  switch (config.gameType) {
-    case "casual":
-      command += "game_type 0;game_mode 0;";
-      break;
-    case "competitive":
-      command += "game_type 0;game_mode 1;mp_autokick 0;";
-      break;
-    case "wingman":
-      command += "game_type 0;game_mode 2;";
-      break;
-    case "armrace":
-      command += "game_type 1;game_mode 0;";
-      break;
-    case "demolition":
-      command += "game_type 1;game_mode 1;";
-      break;
-    case "deathmatch":
-      command += "game_type 1;game_mode 2;";
-      break;
-    case "guardian":
-      command += "game_type 4;game_mode 0;";
-      break;
-    case "co-op_strike":
-      command += "game_type 4;game_mode 1;";
-      break;
-    case "danger_zone":
-      command += "game_type 6;game_mode 0;";
-      break;
-    default:
-      break;
+    
+  if (config.useTeammatesAreEnemies) {
+    command += "mp_teammates_are_enemies 1;mp_autokick 0;"
   }
   
-  command += `changelevel ${config.map};bot_kick;`;
+  command += "bot_kick;";
+    
+  if (config.addBotCt) {
+    command += getBots(config.addBotCt, "ct", config.botLevel);
+  }
   
+  if (config.addBotT) {
+    command += getBots(config.addBotT, "t", config.botLevel);
+  }
+  
+  return command;
+};
+
+const getBots = (qty, botType, botLevel) => {
+  let command = "";
+  for (let index = 0; index < qty; index++) {
+    command += `bot_add ${botType} ${botLevel};`;
+  }
   return command;
 };
