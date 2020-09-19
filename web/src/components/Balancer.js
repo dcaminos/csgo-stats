@@ -1,6 +1,7 @@
 import BalancerPlayers from "components/BalancerPlayers";
 import BalancerTeam from "components/BalancerTeam";
 import ModalSetTeams from "components/ModalSetTeams";
+import ServerExtraConfig from "components/ServerExtraConfig"
 import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useSelector } from "react-redux";
@@ -123,6 +124,9 @@ const Balancer = ({ players }) => {
               teamA={teamA}
               teamB={teamB}
             />
+          </Row>
+          <Row>
+            <Col><ServerExtraConfig></ServerExtraConfig></Col>
           </Row>
         </Col>
       </Row>

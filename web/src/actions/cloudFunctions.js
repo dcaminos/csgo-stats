@@ -11,6 +11,7 @@ const CHECK_SERVER_STATUS = "checkServerStatus";
 const START_SERVER = "startServer";
 const SET_TEAMS = "setTeams";
 const SET_CONFIG = "setConfig";
+const SET_BOTS = "setBots";
 const STARTING_SERVER_TIMEOUT = 40000;
 
 function fetchStartServerPending() {
@@ -71,6 +72,16 @@ export const setTeams = (teamA, teamB) => {
 export const setConfig = (config) => {
   return async (dispatch) => {
     const url = new URL(API_URL + SET_CONFIG);
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(config),
+    });
+  };
+};
+
+export const setBots = (config) => {
+  return async (dispatch) => {
+    const url = new URL(API_URL + SET_BOTS);
     fetch(url, {
       method: "POST",
       body: JSON.stringify(config),

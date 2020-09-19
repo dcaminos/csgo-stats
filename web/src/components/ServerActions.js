@@ -29,7 +29,7 @@ const ServerActions = ({ id }) => {
       <Button onClick={() => dispatch(startServer())}>{"Start Server"}</Button>
     );
 
-    if (status.state === "ON") {
+    if (status.state === "OFF") {
       return (
         <div className="d-flex align-items-center">
           <ButtonPlay />
