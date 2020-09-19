@@ -79,7 +79,7 @@ const ServerExtraConfig = () => {
         <CardBody>
           <CardTitle>
             <p className="d-flex flex-row justify-content-center">
-              <strong>Game extra configuration</strong>
+              <strong>Additional game settings</strong>
             </p>
           </CardTitle>
           <FormGroup>
